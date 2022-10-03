@@ -55,8 +55,6 @@ To learn more, click on the "About" menu item on the left once we deploy the app
 
 If not logged in via the CLI, click on the dropdown arrow next to your name in the top-right and select *Copy Login Command*.
 
-{% collapsible %}
-
 ![CLI Login](../media/managedlab/7-ostoy-login.png)
 
 A new tab will open click "Display Token"
@@ -72,13 +70,9 @@ You have access to 67 projects, the list has been suppressed. You can list all p
 Using project "default".
 ```
 
-{% endcollapsible %}
-
 ### Create new project
 
 Create a new project called "OSToy" in your cluster.
-
-{% collapsible %}
 
 Use the following command
 
@@ -96,13 +90,9 @@ Equivalently you can also create this new project using the web console by selec
 
 ![UI Create Project](../media/managedlab/6-ostoy-newproj.png)
 
-{% endcollapsible %}
-
 ### View the YAML deployment objects
 
 View the Kubernetes deployment object YAMLs.  If you wish you can download them from the following locations to your Azure Cloud Shell, to your local machine, or just use the direct link in the next steps.
-
-{% collapsible %}
 
 Feel free to open them up and take a look at what we will be deploying. For simplicity of this lab we have placed all the Kubernetes objects we are deploying in one "all-in-one" YAML file.  Though in reality there are benefits (ease of maintenance and less risk) to separating these out into individual files.
 
@@ -110,13 +100,9 @@ Feel free to open them up and take a look at what we will be deploying. For simp
 
 [ostoy-microservice-deployment.yaml](https://github.com/microsoft/aroworkshop/blob/master/yaml/ostoy-microservice-deployment.yaml)
 
-{% endcollapsible %}
-
 ### Deploy backend microservice
 
 The microservice serves internal web requests and returns a JSON object containing the current hostname and a randomly generated color string.
-
-{% collapsible %}
 
 In your terminal deploy the microservice using the following command:
 
@@ -129,13 +115,9 @@ deployment.apps/ostoy-microservice created
 service/ostoy-microservice-svc created
 ```
 
-{% endcollapsible %}
-
 ### Deploy the front-end service
 
 This deployment contains the node.js frontend for our application along with a few other Kubernetes objects.
-
-{% collapsible %}
 
  If you open the *ostoy-fe-deployment.yaml* you will see we are defining:
 
@@ -164,16 +146,12 @@ configmap/ostoy-configmap-files created
 secret/ostoy-secret created
 ```
 
-{% endcollapsible %}
-
 ### Get route
 
 Get the route so that we can access the application via:
 
  `oc get route`
-
-{% collapsible %}
-
+ 
 You should see the following response:
 
 ```
@@ -332,8 +310,6 @@ In this section we'll take a look at how OSToy can be configured using [ConfigMa
 
 ConfigMaps allow you to decouple configuration artifacts from container image content to keep containerized applications portable.
 
-{% collapsible %}
-
 Click on *Config Maps* in the left menu.
 
 This will display the contents of the configmap available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
@@ -347,13 +323,9 @@ data:
   config.json:  '{ "default": "123" }'
 ```
 
-{% endcollapsible %}
-
 ### Configuration using Secrets
 
 Kubernetes Secret objects allow you to store and manage sensitive information, such as passwords, OAuth tokens, and ssh keys. Putting this information in a secret is safer and more flexible than putting it, verbatim, into a pod definition or a container image.
-
-{% collapsible %}
 
 Click on *Secrets* in the left menu.
 
@@ -369,13 +341,9 @@ data:
 type: Opaque
 ```
 
-{% endcollapsible %}
-
 ### Configuration using Environment Variables
 
 Using environment variables is an easy way to change application behavior without requiring code changes. It allows different deployments of the same application to potentially behave differently based on the environment variables, and OpenShift makes it simple to set, view, and update environment variables for Pods/Deployments.
-
-{% collapsible %}
 
 Click on *ENV Variables* in the left menu.
 
@@ -413,8 +381,6 @@ As can be seen in the image above we have defined at least 2 separate pods, each
 
 Click on *Networking* in the left menu. Review the networking configuration.
 
-{% collapsible %}
-
 The right tile titled "Hostname Lookup" illustrates how the service name created for a pod can be used to translate into an internal ClusterIP address. Enter the name of the microservice following the format of `my-svc.my-namespace.svc.cluster.local` which we created in our `ostoy-microservice.yaml` as seen here:
 
 ```
@@ -440,13 +406,9 @@ We will see an IP address returned.  In our example it is `172.30.165.246`.  Thi
 
 ![ostoy DNS](../media/managedlab/20-ostoy-dns.png)
 
-{% endcollapsible %}
-
 ### Scaling
 
 OpenShift allows one to scale up/down the number of pods for each part of an application as needed.  This can be accomplished via changing our *replicaset/deployment* definition (declarative), by the command line (imperative), or via the web console (imperative). In our *deployment* definition (part of our `ostoy-fe-deployment.yaml`) we stated that we only want one pod for our microservice to start with. This means that the Kubernetes Replication Controller will always strive to keep one pod alive. We can also define pod autoscaling using the [Horizontal Pod Autoscaler](https://docs.openshift.com/container-platform/latest/nodes/pods/nodes-pods-autoscaling.html) (HPA) based on load to expand past what we defined. We will do this in a later section of this lab.
-
-{% collapsible %}
 
 If we look at the tile on the left we should see one box randomly changing colors.  This box displays the randomly generated color sent to the frontend by our microservice along with the pod name that sent it. Since we see only one box that means there is only one microservice pod.  We will now scale up our microservice pods and will see the number of boxes change.
 
@@ -509,8 +471,6 @@ As defined in the documentation:
 In more simple words, "if there is a lot of work, make more pods".
 
 We will create a HPA and then use OSToy to generate CPU intensive workloads.  We will then observe how the HPA will scale up the number of pods in order to handle the increased workloads.  
-
-{% collapsible %}
 
 #### 1. Create the Horizontal Pod Autoscaler
 
