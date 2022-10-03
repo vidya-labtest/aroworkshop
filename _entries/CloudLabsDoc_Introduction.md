@@ -26,19 +26,19 @@ Head over to <https://shell.azure.com> and sign in with your Azure Subscription 
 
 Select **Bash** as your shell.
 
-![Select Bash](media/cloudshell/0-bash.png)
+![Select Bash](../media/cloudshell/0-bash.png)
 
 Select **Show advanced settings**
 
-![Select show advanced settings](media/cloudshell/1-mountstorage-advanced.png)
+![Select show advanced settings](../media/cloudshell/1-mountstorage-advanced.png)
 
 Set the **Storage account** and **File share** names to your resource group name (all lowercase, without any special characters). Leave other settings unchanged, then hit **Create storage**
 
-![Azure Cloud Shell](media/cloudshell/2-storageaccount-fileshare.png)
+![Azure Cloud Shell](../media/cloudshell/2-storageaccount-fileshare.png)
 
 You should now have access to the Azure Cloud Shell
 
-![Set the storage account and fileshare names](media/cloudshell/3-cloudshell.png)
+![Set the storage account and fileshare names](../media/cloudshell/3-cloudshell.png)
 
 
 #### OpenShift CLI (oc)
@@ -46,7 +46,7 @@ You should now have access to the Azure Cloud Shell
 You'll need to download the **latest OpenShift CLI (oc)** client tools for OpenShift 4. You can follow the steps below on the Azure Cloud Shell.
 
 > **Note** You'll need to change the link below to the latest link you get from the page.
-> ![GitHub release links](media/github-oc-release.png)
+> ![GitHub release links](../media/github-oc-release.png)
 
 Please run following commands on Azure Cloud Shell to download and setup the OpenShift client.
 
@@ -125,7 +125,7 @@ Dockerfiles are run without many of the normal operational controls of container
 
 An OpenShift `Route` exposes a service at a host name, like www.example.com, so that external clients can reach it by name. When a `Route` object is created on OpenShift, it gets picked up by the built-in HAProxy load balancer in order to expose the requested service and make it externally available with the given configuration. You might be familiar with the Kubernetes `Ingress` object and might already be asking "what's the difference?". Red Hat created the concept of `Route` in order to fill this need and then contributed the design principles behind this to the community; which heavily influenced the `Ingress` design.  Though a `Route` does have some additional features as can be seen in the chart below.
 
-![routes vs ingress](media/managedlab/routes-vs-ingress.png)
+![routes vs ingress](../media/managedlab/routes-vs-ingress.png)
 
 > **NOTE:** DNS resolution for a host name is handled separately from routing; your administrator may have configured a cloud domain that will always correctly resolve to the router, or if using an unrelated host name you may need to modify its DNS records independently to resolve to the router.
 
