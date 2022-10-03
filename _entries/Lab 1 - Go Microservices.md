@@ -6,7 +6,7 @@ Now that you have your environment provisioned and the prerequisites fulfilled, 
 
 You will be deploying a ratings application on Azure Red Hat OpenShift.
 
-![Application diagram](media/app-overview.png)
+![Application diagram](../media/app-overview.png)
 
 The application consists of 3 components:
 
@@ -18,9 +18,9 @@ The application consists of 3 components:
 
 Once you're done, you'll have an experience similar to the below.
 
-![Application](media/app-overview-1.png)
-![Application](media/app-overview-2.png)
-![Application](media/app-overview-3.png)
+![Application](../media/app-overview-1.png)
+![Application](../media/app-overview-2.png)
+![Application](../media/app-overview-3.png)
 
 ## 2.2 Connect to the cluster
 
@@ -61,7 +61,7 @@ The cluster web console's URL will be listed. Open that link in new browser tab 
 
 After logging in, you should be able to see the Azure Red Hat OpenShift Web Console.
 
-![Azure Red Hat OpenShift Web Console](media/openshift-webconsole.png)
+![Azure Red Hat OpenShift Web Console](../media/openshift-webconsole.png)
 
 ### Retrieve the login command and token
 
@@ -69,16 +69,16 @@ After logging in, you should be able to see the Azure Red Hat OpenShift Web Cons
 
 Once you're logged into the Web Console, click on the username on the top right, then click **Copy login command**.
 
-![Copy login command](media/login-command.png)
+![Copy login command](../media/login-command.png)
 
 On the following page click on **Display Token** and copy the ```oc login``` line.
 
-![Display Token Link](media/oc-display-token-link.png)
-![Copy Login Token](media/oc-copy-login-token.png)
+![Display Token Link](../media/oc-display-token-link.png)
+![Copy Login Token](../media/oc-copy-login-token.png)
 
 Open the [Azure Cloud Shell](https://shell.azure.com) and paste the login command. You should be able to connect to the cluster.
 
-![Login through the cloud shell](media/oc-login-cloudshell.png)
+![Login through the cloud shell](../media/oc-login-cloudshell.png)
 
 ### Create a project
 
@@ -88,7 +88,7 @@ A project allows a community of users to organize and manage their content in is
 oc new-project workshop
 ```
 
-![Create new project](media/oc-newproject.png)
+![Create new project](../media/oc-newproject.png)
 
 > **Resources**
 
@@ -113,7 +113,7 @@ oc new-app bitnami/mongodb \
 
 If you now head back to the web console, and switch to the **workshop** project, you should see a new deployment for mongoDB.
 
-![MongoDB deployment](media/mongodb-overview.png)
+![MongoDB deployment](../media/mongodb-overview.png)
 
 ### Verify if the mongoDB pod was created successfully
 
@@ -123,7 +123,7 @@ Run the `oc get all` command to view the status of the new application and verif
 oc get all
 ```
 
-![oc status](media/oc-status-mongodb.png)
+![oc status](../media/oc-status-mongodb.png)
 
 ### Retrieve mongoDB service hostname
 
@@ -133,13 +133,13 @@ Find the mongoDB service.
 oc get svc mongodb
 ```
 
-![oc get svc](media/oc-get-svc-mongo.png)
+![oc get svc](../media/oc-get-svc-mongo.png)
 
 The service will be accessible at the following DNS name: `mongodb.workshop.svc.cluster.local` which is formed of `[service name].[project name].svc.cluster.local`. This resolves only within the cluster.
 
 You can also retrieve this from the web console. You'll need this hostname to configure the `rating-api`.
 
-![MongoDB service in the Web Console](media/mongo-svc-webconsole.png)
+![MongoDB service in the Web Console](../media/mongo-svc-webconsole.png)
 
 ## 2.5 Deploy Ratings API
 
@@ -165,7 +165,7 @@ To be able to setup CI/CD webhooks, you'll need to fork the application into you
 oc new-app https://github.com/<your GitHub username>/rating-api --strategy=source
 ```
 
-![Create rating-api using oc cli](media/oc-newapp-ratingapi.png)
+![Create rating-api using oc cli](../media/oc-newapp-ratingapi.png)
 
 {% endcollapsible %}
 
@@ -177,7 +177,7 @@ Create the `MONGODB_URI` environment variable. This URI should look like `mongod
 
 Hit **Save** when done.
 
-![Create a MONGODB_URI environment variable](media/rating-api-envvars.png)
+![Create a MONGODB_URI environment variable](../media/rating-api-envvars.png)
 
 It can also be done with CLI
 
@@ -194,7 +194,7 @@ oc set env deploy/rating-api MONGODB_URI=mongodb://ratingsuser:ratingspassword@m
 If you navigate to the logs of the `rating-api` deployment, you should see a log message confirming the code can successfully connect to the mongoDB.
 For that, in the deployment's details screen, click on *Pods* tab, then on one of the pods
 
-![Verify mongoDB connection](media/rating-api-working.png)
+![Verify mongoDB connection](../media/rating-api-working.png)
 
 {% endcollapsible %}
 
@@ -226,7 +226,7 @@ oc get bc/rating-api -o=jsonpath='{.spec.triggers..github.secret}'
 
 You'll get back something similar to the below. Make note the secret key in the red box as you'll need it in a few steps.
 
-![Rating API GitHub trigger secret](media/rating-api-github-secret.png)
+![Rating API GitHub trigger secret](../media/rating-api-github-secret.png)
 
 Retrieve the GitHub webhook trigger URL from the build configuration.
 
@@ -234,7 +234,7 @@ Retrieve the GitHub webhook trigger URL from the build configuration.
 oc describe bc/rating-api
 ```
 
-![Rating API GitHub trigger url](media/rating-api-github-webhook-url.png)
+![Rating API GitHub trigger url](../media/rating-api-github-webhook-url.png)
 
 Replace the `<secret>` placeholder with the secret you retrieved in the previous step to have a URL similar to `https://api.otyvsnz3.eastus.aroapp.io:6443/apis/build.openshift.io/v1/namespaces/workshop/buildconfigs/rating-api/webhooks/SECRETSTRING/github`. You'll use this URL to setup the webhook on your GitHub repository.
 
@@ -246,7 +246,7 @@ Change the Content Type from GitHub’s default **application/x-www-form-urlenco
 
 Click **Add webhook**.
 
-![GitHub add webhook](media/rating-api-github-addwebhook.png)
+![GitHub add webhook](../media/rating-api-github-addwebhook.png)
 
 You should see a message from GitHub stating that your webhook was successfully configured.
 
@@ -294,7 +294,7 @@ wget https://raw.githubusercontent.com/sajitsasi/rating-web/master/Dockerfile -O
 wget https://raw.githubusercontent.com/sajitsasi/rating-web/master/src/components/Footer.vue -O ./src/components/Footer.vue
 ```
 
-![Clone and update files](media/clone_and_update.png)
+![Clone and update files](../media/clone_and_update.png)
 
 4. Verify, stage, commit and push changes to your local repository
 
@@ -305,7 +305,7 @@ git commit -m "Modified Dockerfile and Footer.vue"
 git push
 ```
 
-![Push changes to repository](media/git-push.png)
+![Push changes to repository](../media/git-push.png)
 
 {% endcollapsible %}
 
@@ -321,7 +321,7 @@ oc new-app https://github.com/<your GitHub username>/rating-web --strategy=docke
 
 The build will take between 5-10 minutes
 
-![Create rating-web using oc cli](media/oc-newapp-ratingweb.png)
+![Create rating-web using oc cli](../media/oc-newapp-ratingweb.png)
 
 {% endcollapsible %}
 
@@ -358,7 +358,7 @@ oc get route rating-web
 
 You should get a response similar to the below.
 
-![Retrieve the created route](media/oc-get-route.png)
+![Retrieve the created route](../media/oc-get-route.png)
 
 Notice the fully qualified domain name (FQDN) is comprised of the application name and project name by default. The remainder of the FQDN, the subdomain, is your Azure Red Hat OpenShift cluster specific apps subdomain.
 
@@ -370,7 +370,7 @@ Notice the fully qualified domain name (FQDN) is comprised of the application na
 
 Open the hostname in your browser, you should see the rating app page. Play around, submit a few votes and check the leaderboard.
 
-![rating-web homepage](media/rating-web-homepage.png)
+![rating-web homepage](../media/rating-web-homepage.png)
 
 {% endcollapsible %}
 
@@ -388,7 +388,7 @@ oc get bc/rating-web -o=jsonpath='{.spec.triggers..github.secret}'
 
 You'll get back something similar to the below. Make note the secret key in the red box as you'll need it in a few steps.
 
-![Rating Web GitHub trigger secret](media/rating-web-github-secret.png)
+![Rating Web GitHub trigger secret](../media/rating-web-github-secret.png)
 
 Retrieve the GitHub webhook trigger URL from the build configuration.
 
@@ -396,7 +396,7 @@ Retrieve the GitHub webhook trigger URL from the build configuration.
 oc describe bc/rating-web
 ```
 
-![Rating Web GitHub trigger url](media/rating-web-github-webhook-url.png)
+![Rating Web GitHub trigger url](../media/rating-web-github-webhook-url.png)
 
 Replace the `<secret>` placeholder with the secret you retrieved in the previous step to have a URL similar to `https://api.otyvsnz3.eastus.aroapp.io:6443/apis/build.openshift.io/v1/namespaces/workshop/buildconfigs/rating-web/webhooks/SECRETSTRING/github`. You'll use this URL to setup the webhook on your GitHub repository.
 
@@ -408,7 +408,7 @@ Change the Content Type from GitHub’s default **application/x-www-form-urlenco
 
 Click **Add webhook**.
 
-![GitHub add webhook](media/rating-web-github-addwebhook.png)
+![GitHub add webhook](../media/rating-web-github-addwebhook.png)
 
 You should see a message from GitHub stating that your webhook was successfully configured.
 
@@ -426,13 +426,13 @@ Edit the file, and change the `background-color: #999;` line to be `background-c
 
 Commit the changes to the file into the `master` branch.
 
-![GitHub edit app](media/rating-web-editcolor.png)
+![GitHub edit app](../media/rating-web-editcolor.png)
 
 Immediately, go to the **Builds** tab in the OpenShift Web Console. You'll see a new build queued up which was triggered by the push. Once this is done, it will trigger a new deployment and you should see the new website color updated.
 
-![Webhook build](media/rating-web-cicd-build.png)
+![Webhook build](../media/rating-web-cicd-build.png)
 
-![New rating website](media/rating-web-newcolor.png)
+![New rating website](../media/rating-web-newcolor.png)
 
 {% endcollapsible %}
 
@@ -448,10 +448,10 @@ Now that you have the application working, it is time to apply some security har
 {% collapsible %}
 
 Switch to the Administrator console.
-![Switch to the Administrator console](media/switch-to-admin-console.png)
+![Switch to the Administrator console](../media/switch-to-admin-console.png)
 
 Make sure you're in the **workshop** project, expand **Networking** and click **Create Network Policy**.
-![Cluster console page](media/cluster-console.png)
+![Cluster console page](../media/cluster-console.png)
 
 {% endcollapsible %}
 
@@ -480,7 +480,7 @@ spec:
               app: rating-web
 ```
 
-![Create network policy](media/create-networkpolicy.png)
+![Create network policy](../media/create-networkpolicy.png)
 
 Click **Create**.
 
