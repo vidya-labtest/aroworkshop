@@ -159,19 +159,13 @@ To be able to setup CI/CD webhooks, you'll need to fork the application into you
 
 > **Note** You're going to be using [source-to-image (S2I)](#source-to-image-s2i) as a build strategy.
 
-{% collapsible %}
-
 ```sh
 oc new-app https://github.com/<your GitHub username>/rating-api --strategy=source
 ```
 
 ![Create rating-api using oc cli](../media/oc-newapp-ratingapi.png)
 
-{% endcollapsible %}
-
 ### Configure the required environment variables
-
-{% collapsible %}
 
 Create the `MONGODB_URI` environment variable. This URI should look like `mongodb://[username]:[password]@[endpoint]:27017/ratingsdb`. You'll need to replace the `[usernaame]` and `[password]` with the ones you used when creating the database. You'll also need to replace the `[endpoint]` with the hostname acquired in the previous step
 
@@ -185,22 +179,14 @@ It can also be done with CLI
 oc set env deploy/rating-api MONGODB_URI=mongodb://ratingsuser:ratingspassword@mongodb.workshop.svc.cluster.local:27017/ratingsdb
 ```
 
-{% endcollapsible %}
-
 ### Verify that the service is running
-
-{% collapsible %}
 
 If you navigate to the logs of the `rating-api` deployment, you should see a log message confirming the code can successfully connect to the mongoDB.
 For that, in the deployment's details screen, click on *Pods* tab, then on one of the pods
 
 ![Verify mongoDB connection](../media/rating-api-working.png)
 
-{% endcollapsible %}
-
 ### Retrieve `rating-api` service hostname
-
-{% collapsible %}
 
 Find the `rating-api` service.
 
@@ -210,13 +196,9 @@ oc get svc rating-api
 
 The service will be accessible at the following DNS name over port 8080: `rating-api.workshop.svc.cluster.local:8080` which is formed of `[service name].[project name].svc.cluster.local`. This resolves only within the cluster.
 
-{% endcollapsible %}
-
 ### Setup GitHub webhook
 
 To trigger S2I builds when you push code into your GitHib repo, you'll need to setup the GitHub webhook.
-
-{% collapsible %}
 
 Retrieve the GitHub webhook trigger secret. You'll need use this secret in the GitHub webhook URL.
 
@@ -252,8 +234,6 @@ You should see a message from GitHub stating that your webhook was successfully 
 
 Now, whenever you push a change to your GitHub repository, a new build will automatically start, and upon a successful build a new deployment will start.
 
-{% endcollapsible %}
-
 > **Resources**
 > * [ARO Documentation - Triggering builds](https://docs.openshift.com/aro/4/builds/triggering-builds-build-hooks.html)
 
@@ -277,8 +257,6 @@ To be able to setup CI/CD webhooks, you'll need to fork the application into you
 > **Note** The Dockerfile needs to be modified to use the correct node.js image to build correctly.
 
 > **Note** The `git` commands shown below have been run in a local shell pre-authenticated against the GitHub repository
-
-{% collapsible %}
 
 1. Clone the Git repository locally and change to repo directory
 
@@ -307,13 +285,9 @@ git push
 
 ![Push changes to repository](../media/git-push.png)
 
-{% endcollapsible %}
-
 ### Use the OpenShift CLI to deploy the `rating-web`
 
 > **Note** You're going to be using [source-to-image (S2I)](#source-to-image-s2i) as a build strategy.
-
-{% collapsible %}
 
 ```sh
 oc new-app https://github.com/<your GitHub username>/rating-web --strategy=docker
@@ -323,11 +297,7 @@ The build will take between 5-10 minutes
 
 ![Create rating-web using oc cli](../media/oc-newapp-ratingweb.png)
 
-{% endcollapsible %}
-
 ### Configure the required environment variables
-
-{% collapsible %}
 
 Create the `API` environment variable for `rating-web` Deployment Config. The value of this variable is going to be the hostname/port of the `rating-api` service.
 
@@ -338,11 +308,7 @@ oc set env deploy rating-web API=http://rating-api:8080
 
 ```
 
-{% endcollapsible %}
-
 ### Expose the `rating-web` service using a Route
-
-{% collapsible %}
 
 Expose the service.
 
@@ -362,23 +328,15 @@ You should get a response similar to the below.
 
 Notice the fully qualified domain name (FQDN) is comprised of the application name and project name by default. The remainder of the FQDN, the subdomain, is your Azure Red Hat OpenShift cluster specific apps subdomain.
 
-{% endcollapsible %}
-
 ### Try the service
-
-{% collapsible %}
 
 Open the hostname in your browser, you should see the rating app page. Play around, submit a few votes and check the leaderboard.
 
 ![rating-web homepage](../media/rating-web-homepage.png)
 
-{% endcollapsible %}
-
 ### Setup GitHub webhook
 
 To trigger S2I builds when you push code into your GitHib repo, you'll need to setup the GitHub webhook.
-
-{% collapsible %}
 
 Retrieve the GitHub webhook trigger secret. You'll need use this secret in the GitHub webhook URL.
 
@@ -414,11 +372,7 @@ You should see a message from GitHub stating that your webhook was successfully 
 
 Now, whenever you push a change to your GitHub repository, a new build will automatically start, and upon a successful build a new deployment will start.
 
-{% endcollapsible %}
-
 ### Make a change to the website app and see the rolling update
-
-{% collapsible %}
 
 Go to the `https://github.com/<your GitHub username>/rating-web/blob/master/src/App.vue` file in your repository on GitHub.
 
@@ -434,8 +388,6 @@ Immediately, go to the **Builds** tab in the OpenShift Web Console. You'll see a
 
 ![New rating website](../media/rating-web-newcolor.png)
 
-{% endcollapsible %}
-
 > **Resources**
 > * [ARO Documentation - Triggering builds](https://docs.openshift.com/aro/4/builds/triggering-builds-build-hooks.html)
 
@@ -445,19 +397,13 @@ Now that you have the application working, it is time to apply some security har
 
 ### Switch to the Cluster Console
 
-{% collapsible %}
-
 Switch to the Administrator console.
 ![Switch to the Administrator console](../media/switch-to-admin-console.png)
 
 Make sure you're in the **workshop** project, expand **Networking** and click **Create Network Policy**.
 ![Cluster console page](../media/cluster-console.png)
 
-{% endcollapsible %}
-
 ### Create network policy
-
-{% collapsible %}
 
 You will create a policy that applies to any pod matching the `app=rating-api` label. The policy will allow ingress only from pods matching the `app=rating-web` label.
 
@@ -483,8 +429,6 @@ spec:
 ![Create network policy](../media/create-networkpolicy.png)
 
 Click **Create**.
-
-{% endcollapsible %}
 
 > **Resources**
 > * [ARO Documentation - Managing Networking with Network Policy](https://docs.openshift.com/aro/4/networking/network_policy/creating-network-policy.html)
