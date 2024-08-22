@@ -635,11 +635,11 @@ Access your OpenShift web console from the relevant URL. If you need to find the
 
 Expand “Compute” in the left menu and then click on “MachineSets”
 
-Image
+![](../media/managedlab/3.9-scale-nodes-1.png)
 
 In the main pane you will see the same information about the machine sets from the command line. Now click on the “three dots” at the end of the line for the machine set that you scaled up to “2”. Select “Edit machine count” and decrease it to “1”. Click save.
 
-Image
+![](../media/managedlab/3.9-scale-nodes-2.png)
 
 ### Cluster Autoscaling
 
@@ -813,7 +813,7 @@ To add a node label it is recommended to set the label in the machine set. While
 
 Select “MachineSets” from the left menu. You will see the list of machinesets.
 
-image
+![](../media/managedlab/3.9-machine-sets-3.png)
 
 We’ll select the first one “ok0620-rq5tl-worker-westus21”
 
@@ -821,7 +821,7 @@ Click on the second tab “YAML”
 
 Click into the YAML and under spec.template.spec.metadata add “labels:” then under that add a key:value pair for the label you want. In our example we can add a label “tier: frontend”. Click Save.
 
-image
+![](../media/managedlab/3.9-machine-sets-frontend-4.png)
 
 The already existing machine won’t get this label but any new machines will. So to ensure that all machines get the label, we will scale down this machine set to zero, then once completed we will scale it back up as we did earlier.
 
@@ -829,7 +829,7 @@ Click on the node that was just created.
 
 You can see that the label is now there.
 
-image
+![](../media/managedlab/3.9-nodes-frontend-5.png)
 
 ## 3.10 Azure Service Operator - Blob Store
 
@@ -870,7 +870,7 @@ To provide a clearer understanding of the process, the procedure we will be foll
 
 Below is an updated application diagram of what this will look like after completing this section.
 
-Image
+![](../media/managedlab/3.10-arch-diagram.png)
 
 **Access the cluster** - Login to the cluster using the oc CLI if you are not already logged in.
 
@@ -1187,7 +1187,7 @@ After about a minute we can use our app to see the contents of our Blob storage 
 
 1. You will see a page that lists the contents of the bucket, which at this point should be empty.
 
-   image
+   ![](../media/managedlab/3.10-aso-blob-strg.png)
 
 1. Move on to the next step to add some files.
 
@@ -1205,13 +1205,13 @@ For this step we will use OStoy to create a file and upload it to the Blob Stora
 
 1. Click “Create file”.
 
-   Image
+   ![](../media/managedlab/3.10-create-file.png)
 
 1. Scroll up to the top section for existing files and you should see your file that you just created there.
 
 1. Click on the file name to view the file.
 
-   Image
+   ![](../media/managedlab/3.10-create-file-name.png)
 
 1. Now to confirm that this is not just some smoke and mirrors, let’s confirm directly via the CLI. Run the following to list the contents of our bucket.
 
