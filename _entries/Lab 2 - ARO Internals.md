@@ -530,3 +530,703 @@ Wait a few minutes and colorful graphs will appear showing resource usage across
 ![select_metrics](../media/managedlab/35-metrics.png)
 
 At this point feel free to go back to the [logging section](#lab2-logging) to view this data through Container Insights for Azure Arc-enabled Kubernetes clusters.
+
+## 3.9 Managing Worker Nodes
+
+There may be times when you need to change aspects of your worker nodes. Things like scaling, changing the type, adding labels or taints to name a few. Most of these things are done through the use of machine sets. A machine is a unit that describes the host for a node and a machine set is a group of machines. Think of a machine set as a “template” for the kinds of machines that make up the worker nodes of your cluster. Similar to how a replicaset is to pods. A machine set allows users to manage many machines as a single entity though it is contained to a specific availability zone. If you’d like to learn more see [Overview of machine management](https://docs.openshift.com/container-platform/4.16/machine_management/index.html)
+
+### Scaling worker nodes
+
+#### View the machine sets that are in the cluster
+
+Let’s see which machine sets we have in our cluster. If you are following this lab, you should only have three so far (one for each availability zone).
+
+From the terminal run:
+
+`oc get machinesets -n openshift-machine-api`
+
+You will see a response like:
+
+```
+$ oc get machinesets -n openshift-machine-api
+NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+ok0620-rq5tl-worker-westus21   1         1         1       1           72m
+ok0620-rq5tl-worker-westus22   1         1         1       1           72m
+ok0620-rq5tl-worker-westus23   1         1         1       1           72m
+```
+
+This is telling us that there is a machine set defined for each availability zone in westus2 and that each has one machine.
+
+#### View the machines that are in the cluster
+
+Let’s see which machines (nodes) we have in our cluster.
+
+From the terminal run:
+
+`oc get machine -n openshift-machine-api`
+
+You will see a response like:
+
+```
+$ oc get machine -n openshift-machine-api
+NAME                                 PHASE     TYPE              REGION    ZONE   AGE
+ok0620-rq5tl-master-0                Running   Standard_D8s_v3   westus2   1      73m
+ok0620-rq5tl-master-1                Running   Standard_D8s_v3   westus2   2      73m
+ok0620-rq5tl-master-2                Running   Standard_D8s_v3   westus2   3      73m
+ok0620-rq5tl-worker-westus21-n6lcs   Running   Standard_D4s_v3   westus2   1      73m
+ok0620-rq5tl-worker-westus22-ggcmv   Running   Standard_D4s_v3   westus2   2      73m
+ok0620-rq5tl-worker-westus23-hzggb   Running   Standard_D4s_v3   westus2   3      73m
+```
+
+As you can see we have 3 master nodes, 3 worker nodes, the types of nodes, and which region/zone they are in.
+
+#### Scale the number of nodes up via the CLI
+
+Now that we know that we have 3 worker nodes, let’s scale the cluster up to have 4 worker nodes. We can accomplish this through the CLI or through the OpenShift Web Console. We’ll explore both.
+
+From the terminal run the following to imperatively scale up a machine set to 2 worker nodes for a total of 4. Remember that each machine set is tied to an availability zone so with 3 machine sets with 1 machine each, in order to get to a TOTAL of 4 nodes we need to select one of the machine sets to scale up to 2 machines.
+
+`oc scale --replicas=2 machineset <machineset> -n openshift-machine-api`
+
+For example:
+
+`$ oc scale --replicas=2 machineset ok0620-rq5tl-worker-westus23 -n openshift-machine-api
+machineset.machine.openshift.io/ok0620-rq5tl-worker-westus23 scaled`
+
+View the machine set
+
+`oc get machinesets -n openshift-machine-api`
+
+You will now see that the desired number of machines in the machine set we scaled is “2”.
+
+```
+$ oc get machinesets -n openshift-machine-api
+NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+ok0620-rq5tl-worker-westus21   1         1         1       1           73m
+ok0620-rq5tl-worker-westus22   1         1         1       1           73m
+ok0620-rq5tl-worker-westus23   2         2         1       1           73m
+```
+
+If we check the machines in the clusters
+
+`oc get machine -n openshift-machine-api`
+
+You will see that one is in the “Provisioned” phase (and in the zone of the machineset we scaled) and will shortly be in “running” phase.
+
+```
+$ oc get machine -n openshift-machine-api
+NAME                                 PHASE         TYPE              REGION    ZONE   AGE
+ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      74m
+ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      74m
+ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      74m
+ok0620-rq5tl-worker-westus21-n6lcs   Running       Standard_D4s_v3   westus2   1      74m
+ok0620-rq5tl-worker-westus22-ggcmv   Running       Standard_D4s_v3   westus2   2      74m
+ok0620-rq5tl-worker-westus23-5fhm5   Provisioned   Standard_D4s_v3   westus2   3      54s
+ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      74m
+```
+
+#### Scale the number of nodes down via the Web Console
+
+Now let’s scale the cluster back down to a total of 3 worker nodes, but this time, from the web console. (If you need the URL or credentials in order to access it please go back to the relevant portion of Lab 1)
+
+Access your OpenShift web console from the relevant URL. If you need to find the URL you can run:
+
+`az aro show --name <CLUSTER-NAME> --resource-group <RESOURCEGROUP> --query "consoleProfile.url" -o tsv`
+
+Expand “Compute” in the left menu and then click on “MachineSets”
+
+![](../media/managedlab/3.9-scale-nodes-1.png)
+
+In the main pane you will see the same information about the machine sets from the command line. Now click on the “three dots” at the end of the line for the machine set that you scaled up to “2”. Select “Edit machine count” and decrease it to “1”. Click save.
+
+![](../media/managedlab/3.9-scale-nodes-2.png)
+
+### Cluster Autoscaling
+
+The cluster autoscaler adjusts the size of an OpenShift Container Platform cluster to meet its current deployment needs. The cluster autoscaler increases the size of the cluster when there are pods that fail to schedule on any of the current worker nodes due to insufficient resources or when another node is necessary to meet deployment needs. The cluster autoscaler does not increase the cluster resources beyond the limits that you specify. To learn more visit the documentation for [cluster autoscaling](https://docs.openshift.com/container-platform/4.16/machine_management/applying-autoscaling.html).
+
+A ClusterAutoscaler must have at least 1 machine autoscaler in order for the cluster autoscaler to scale the machines. The cluster autoscaler uses the annotations on machine sets that the machine autoscaler sets to determine the resources that it can scale. If you define a cluster autoscaler without also defining machine autoscalers, the cluster autoscaler will never scale your cluster.
+
+#### Create a Machine Autoscaler
+
+This can be accomplished via the Web Console or through the CLI with a YAML file for the custom resource definition. We’ll use the latter.
+
+Download the sample [MachineAutoscaler resource definition](https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/machine-autoscaler.yaml) and open it in your favorite editor.
+
+For **metadata.name** give this machine autoscaler a name. Technically, this can be anything you want. But to make it easier to identify which machine set this machine autoscaler affects, specify or include the name of the machine set to scale. The machine set name takes the following form: <clusterid>-<machineset>-<region-az>.
+
+For **spec.ScaleTargetRef.name** enter the name of the exact MachineSet you want this to apply to. Below is an example of a completed file.
+
+```
+apiVersion: "autoscaling.openshift.io/v1beta1"
+kind: "MachineAutoscaler"
+metadata:
+  name: "ok0620-rq5tl-worker-westus21-autoscaler"
+  namespace: "openshift-machine-api"
+spec:
+  minReplicas: 1
+  maxReplicas: 7
+  scaleTargetRef:
+    apiVersion: machine.openshift.io/v1beta1
+    kind: MachineSet
+    name: ok0620-rq5tl-worker-westus21
+```
+
+Save your file.
+
+Then create the resource in the cluster. Assuming you kept the same filename:
+
+`oc create -f machine-autoscaler.yaml`
+
+```
+$ oc create -f machine-autoscaler.yaml
+machineautoscaler.autoscaling.openshift.io/ok0620-rq5tl-worker-westus21-mautoscaler created
+```
+
+You can also confirm this by checking the web console under “MachineAutoscalers” or by running:
+
+`oc get machineautoscaler -n openshift-machine-api`
+
+```
+$ oc get machineautoscaler -n openshift-machine-api
+NAME                           REF KIND     REF NAME                      MIN   MAX   AGE
+ok0620-rq5tl-worker-westus21   MachineSet   ok0620-rq5tl-worker-westus2   1     7     40s
+```
+
+#### Create the Cluster Autoscaler
+
+This is the sample [ClusterAutoscaler resource definition](https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/cluster-autoscaler.yaml) for this lab.
+
+See the [documentation](https://docs.openshift.com/container-platform/4.16/machine_management/applying-autoscaling.html#cluster-autoscaler-cr_applying-autoscaling) for a detailed explanation of each parameter. You shouldn’t need to edit this file.
+
+Create the resource in the cluster:
+
+`oc create -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/cluster-autoscaler.yaml`
+
+```
+$ oc create -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/cluster-autoscaler.yaml
+clusterautoscaler.autoscaling.openshift.io/default created
+```
+
+#### Test the Cluster Autoscaler
+
+Now we will test this out. Create a new project where we will define a job with a load that this cluster cannot handle. This should force the cluster to autoscale to handle the load.
+
+Create a new project called “autoscale-ex”:
+
+`oc new-project autoscale-ex`
+
+Create the job
+
+`oc create -f https://raw.githubusercontent.com/openshift/training/master/assets/job-work-queue.yaml`
+
+After a few seconds, run the following to see what pods have been created.
+
+`oc get pods`
+
+```
+$ oc get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+work-queue-28n9m-29qgj   1/1     Running             0          53s
+work-queue-28n9m-2c9rm   0/1     Pending             0          53s
+work-queue-28n9m-57vnc   0/1     Pending             0          53s
+work-queue-28n9m-5gz7t   0/1     Pending             0          53s
+work-queue-28n9m-5h4jv   0/1     Pending             0          53s
+work-queue-28n9m-6jz7v   0/1     Pending             0          53s
+work-queue-28n9m-6ptgh   0/1     Pending             0          53s
+work-queue-28n9m-78rr9   1/1     Running             0          53s
+work-queue-28n9m-898wn   0/1     ContainerCreating   0          53s
+work-queue-28n9m-8wpbt   0/1     Pending             0          53s
+work-queue-28n9m-9nm78   1/1     Running             0          53s
+work-queue-28n9m-9ntxc   1/1     Running             0          53s
+[...]
+```
+
+We see a lot of pods in a pending state. This should trigger the cluster autoscaler to create more machines using the MachineAutoscaler we created. If we check on the MachineSets:
+
+```
+$ oc get machinesets -n openshift-machine-api
+NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+ok0620-rq5tl-worker-westus21   5         5         1       1           7h17m
+ok0620-rq5tl-worker-westus22   1         1         1       1           7h17m
+ok0620-rq5tl-worker-westus23   1         1         1       1           7h17m
+```
+
+We see that the cluster autoscaler has already scaled the machine set up to 5 in our example. Though it is still waiting for those machines to be ready.
+
+If we check on the machines we should see that 4 are in a “Provisioned” state (there was 1 already existing from before for a total of 5 in this machine set).
+
+```
+$ oc get machines -n openshift-machine-api
+NAME                                 PHASE         TYPE              REGION    ZONE   AGE
+ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      7h18m
+ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      7h18m
+ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      7h18m
+ok0620-rq5tl-worker-westus21-7hqgz   Provisioned   Standard_D4s_v3   westus2   1      72s
+ok0620-rq5tl-worker-westus21-7j22r   Provisioned   Standard_D4s_v3   westus2   1      73s
+ok0620-rq5tl-worker-westus21-7n7nf   Provisioned   Standard_D4s_v3   westus2   1      72s
+ok0620-rq5tl-worker-westus21-8m94b   Provisioned   Standard_D4s_v3   westus2   1      73s
+ok0620-rq5tl-worker-westus21-qnlfl   Running       Standard_D4s_v3   westus2   1      13m
+ok0620-rq5tl-worker-westus22-9dtk5   Running       Standard_D4s_v3   westus2   2      22m
+ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      7h15m
+```
+
+After a few minutes we should see all 5 are provisioned.
+
+```
+$ oc get machinesets -n openshift-machine-api
+NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+ok0620-rq5tl-worker-westus21   5         5         5       5           7h23m
+ok0620-rq5tl-worker-westus22   1         1         1       1           7h23m
+ok0620-rq5tl-worker-westus23   1         1         1       1           7h23m
+```
+
+If we now wait a few more minutes for the pods to complete, we should see the cluster autoscaler begin scale down the machine set and thus delete machines.
+
+```
+$ oc get machinesets -n openshift-machine-api
+NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+ok0620-rq5tl-worker-westus21   4         4         4       4           7h27m
+ok0620-rq5tl-worker-westus22   1         1         1       1           7h27m
+ok0620-rq5tl-worker-westus23   1         1         1       1           7h27m
+```
+
+```
+$ oc get machines -n openshift-machine-api
+NAME                                 PHASE      TYPE              REGION    ZONE   AGE
+ok0620-rq5tl-master-0                Running    Standard_D8s_v3   westus2   1      7h28m
+ok0620-rq5tl-master-1                Running    Standard_D8s_v3   westus2   2      7h28m
+ok0620-rq5tl-master-2                Running    Standard_D8s_v3   westus2   3      7h28m
+ok0620-rq5tl-worker-westus21-7hqgz   Running    Standard_D4s_v3   westus2   1      10m
+ok0620-rq5tl-worker-westus21-7j22r   Running    Standard_D4s_v3   westus2   1      10m
+ok0620-rq5tl-worker-westus21-8m94b   Deleting   Standard_D4s_v3   westus2   1      10m
+ok0620-rq5tl-worker-westus21-qnlfl   Running    Standard_D4s_v3   westus2   1      22m
+ok0620-rq5tl-worker-westus22-9dtk5   Running    Standard_D4s_v3   westus2   2      32m
+ok0620-rq5tl-worker-westus23-hzggb   Running    Standard_D4s_v3   westus2   3      7h24m
+```
+
+#### Adding node labels
+
+To add a node label it is recommended to set the label in the machine set. While you can directly add a label the node, this is not recommended since nodes could be overwritten and then the label would disappear. Once the machine set is modified to contain the desired label any new machines created from that set would have the newly added labels. This means that existing machines (nodes) will not get the label. Therefore, to make sure all nodes have the label, you should scale the machine set down to zero and then scale the machine set back up.
+
+##### Using the web console
+
+Select “MachineSets” from the left menu. You will see the list of machinesets.
+
+![](../media/managedlab/3.9-machine-sets-3.png)
+
+We’ll select the first one “ok0620-rq5tl-worker-westus21”
+
+Click on the second tab “YAML”
+
+Click into the YAML and under spec.template.spec.metadata add “labels:” then under that add a key:value pair for the label you want. In our example we can add a label “tier: frontend”. Click Save.
+
+![](../media/managedlab/3.9-machine-sets-frontend-4.png)
+
+The already existing machine won’t get this label but any new machines will. So to ensure that all machines get the label, we will scale down this machine set to zero, then once completed we will scale it back up as we did earlier.
+
+Click on the node that was just created.
+
+You can see that the label is now there.
+
+![](../media/managedlab/3.9-nodes-frontend-5.png)
+
+## 3.10 Azure Service Operator - Blob Store
+
+### Integrating with Azure services
+
+So far, our OSToy application has functioned independently without relying on any external services. While this may be nice for a workshop environment, it’s not exactly representative of real-world applications. Many applications require external services like databases, object stores, or messaging services.
+
+In this section, we will learn how to integrate our OSToy application with other Azure services, specifically Azure Blob Storage and Key Vault. By the end of this section, our application will be able to securely create and read objects from Blob Storage.
+
+To achieve this, we will use the Azure Service Operator (ASO) to create the necessary services for our application directly from Kubernetes. We will also utilize Key Vault to securely store the connection secret required for accessing the Blob Storage container. We will create a Kubernetes secret to retrieve this secret from Key Vault, enabling our application to access the Blob Storage container using the secret.
+
+To demonstrate this integration, we will use OSToy to create a basic text file and save it in Blob Storage. Finally, we will confirm that the file was successfully added and can be read from Blob Storage.
+
+#### Azure Service Operator (ASO)
+
+The [Azure Service Operator](https://azure.github.io/azure-service-operator/) (ASO) allows you to create and use Azure services directly from Kubernetes. You can deploy your applications, including any required Azure services directly within the Kubernetes framework using a familiar structure to declaratively define and create Azure services like Storage Blob or CosmosDB databases.
+
+#### Key Vault
+
+Azure Key Vault is a cloud-based service provided by Microsoft Azure that allows you to securely store and manage cryptographic keys, secrets, and certificates used by your applications and services.
+
+##### Why should you use Key Vault to store secrets?
+
+Using a secret store like Azure Key Vault allows you to take advantage of a number of benefits.
+
+1. Scalability - Using a secret store service is already designed to scale to handle a large number of secrets over placing them directly in the cluster.
+1. Centralization - You are able to keep all your organizations secrets in one location.
+1. Security - Features like access control, monitoring, encryption and audit are already baked in.
+1. Rotation - Decoupling the secret from your cluster makes it much easier to rotate secrets since you only have to update it in Key Vault and the Kubernetes secret in the cluster will reference that external secret store. This also allows for separation of duties as someone else can manage these resources.
+
+#### Section overview
+
+To provide a clearer understanding of the process, the procedure we will be following consists of three primary parts.
+
+1. **Install the Azure Service Operator** - This allows you to create/delete Azure services (in our case, Blob Storage) through the use of a Kubernetes Custom Resource. Install the controller which will also create the required namespace and the service account and then create the required resources.
+1. **Setup Key Vault** - Perform required prerequisites (ex: install CSI drivers), create a Key Vault instance, add the connection string.
+1. **Application access** - Configuring the application to access the stored connection string in Key Vault and thus enable the application to access the Blob Storage location.
+
+Below is an updated application diagram of what this will look like after completing this section.
+
+![](../media/managedlab/3.10-arch-diagram.png)
+
+**Access the cluster** - Login to the cluster using the oc CLI if you are not already logged in.
+
+#### Setup
+
+##### Define helper variables
+
+Set helper environment variables to facilitate execution of the commands in this section. Replace <REGION> with the Azure region you are deploying into (ex: eastus or westus2).
+
+```
+export AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)
+export AZ_TENANT_ID=$(az account show -o tsv --query tenantId)
+export MY_UUID=$(uuidgen | cut -d - -f 2 | tr '[:upper:]' '[:lower:]')
+export PROJECT_NAME=ostoy-${MY_UUID}
+export KEYVAULT_NAME=secret-store-${MY_UUID}
+export REGION=<REGION>
+```
+
+##### Create a service principal
+
+If you don’t already have a Service Principal to use then we need to create one. It is recommended to create one with Contributor level permissions for this workshop so that the Azure Service Operator can create resources and that access can be granted to Key Vault.
+
+1. Create a service principal for use in the lab and store the client secret in an environment variable.
+
+   ```
+   export SERVICE_PRINCIPAL_CLIENT_SECRET="$(az ad sp create-for-rbac -n aro-lab-sp-${MY_UUID} --role contributor --scopes /subscriptions/$AZURE_SUBSCRIPTION_ID --query 'password' -o tsv)"
+   ```
+
+1. Get the service principal Client Id.
+
+   ```
+   export SERVICE_PRINCIPAL_CLIENT_ID="$(az ad sp list --display-name aro-lab-sp-${MY_UUID} --query '[0].appId' -o tsv)"
+   ```
+
+1. Install Helm if you don’t already have it. You can also check the [Official Helm site](https://helm.sh/docs/intro/install/) for other install options.
+
+   ```
+   curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+   ```
+
+##### Install the Azure Service Operator - Set up ASO
+
+1. We first need to install Cert Manager. Run the following.
+
+   ```
+   oc apply -f https://github.com/jetstack/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+   ```
+
+1. Confirm that the cert-manager pods have started successfully before continuing.
+
+   ```
+   oc get pods -n cert-manager
+   ```
+
+1. You will see a response like:
+
+   ```
+   NAME                                       READY   STATUS    RESTARTS   AGE
+   cert-manager-677874db78-t6wgn              1/1     Running   0          1m
+   cert-manager-cainjector-6c5bf7b759-l722b   1/1     Running   0          1m
+   cert-manager-webhook-5685fdbc4b-rlbhz      1/1     Running   0          1m
+   ```
+
+1. We then need to add the latest Helm chart for the ASO.
+
+   ```
+   helm repo add aso2 https://raw.githubusercontent.com/Azure/azure-service-operator/main/v2/charts
+   ```
+
+1. Update the Helm repository.
+
+   ```
+   helm repo update
+   ```
+
+1. Install the ASO.
+
+   ```
+   helm upgrade --install --devel aso2 aso2/azure-service-operator --create-namespace --namespace=azureserviceoperator-system --set azureSubscriptionID=$AZURE_SUBSCRIPTION_ID --set azureTenantID=$AZ_TENANT_ID --set azureClientID=$SERVICE_PRINCIPAL_CLIENT_ID --set azureClientSecret=$SERVICE_PRINCIPAL_CLIENT_SECRET
+   ```
+
+1. Ensure that the pods are running successfully. This could take about 2 minutes.
+
+   ```
+   oc get pods -n azureserviceoperator-system
+   ```
+
+1. You will see a response like:
+
+   ```
+   NAME                                                      READY   STATUS    RESTARTS   AGE
+   azureserviceoperator-controller-manager-5b4bfc59df-lfpqf   2/2     Running   0          24s
+   ```
+
+#### Create Storage Accounts and containers using the ASO
+
+Now we need to create a Storage Account for our Blob Storage, to use with OSToy. We could create this using the CLI or the Azure Portal, but wouldn’t it be nice if we could do so using standard Kubernetes objects? We could have defined the all these resources in once place (like in the deployment manifest), but for the purpose of gaining experience we will create each resource separately below.
+
+1. Create a new OpenShift project for our OSToy app (even if you already have one from earlier).
+
+   ```
+   oc new-project $PROJECT_NAME
+   ```
+
+1. Create a resource group.
+
+   ```
+   cat << EOF | oc apply -f -
+   apiVersion: resources.azure.com/v1api20200601
+   kind: ResourceGroup
+   metadata:
+     name: ${PROJECT_NAME}-rg
+     namespace: $PROJECT_NAME
+   spec:
+     location: $REGION
+   EOF
+   ```
+
+1. Confirm that the Resource Group was actually created. You will see the name returned. It may take a minute or two to appear.
+
+   ```
+   az group list --query '[].name' --output tsv | grep ${MY_UUID}
+   ```
+
+1. Create a Storage Account.
+
+   ```
+   cat << EOF | oc apply -f -
+   apiVersion: storage.azure.com/v1api20210401
+   kind: StorageAccount
+   metadata:
+     name: ostoystorage${MY_UUID}
+     namespace: $PROJECT_NAME
+   spec:
+     location: $REGION
+     kind: BlobStorage
+     sku:
+       name: Standard_LRS
+     owner:
+       name: ${PROJECT_NAME}-rg
+     accessTier: Hot
+   EOF
+   ```
+
+1. Confirm that it was created. It may take a minute or two to appear.
+
+   ```
+   az storage account list --query '[].name' --output tsv | grep ${MY_UUID}
+   ```
+
+1. Create a Blob service.
+
+   ```
+   cat << EOF | oc apply -f -
+   apiVersion: storage.azure.com/v1api20210401
+   kind: StorageAccountsBlobService
+   metadata:
+     name: ostoystorage${MY_UUID}service
+     namespace: $PROJECT_NAME
+   spec:
+     owner:
+       name: ostoystorage${MY_UUID}
+   EOF
+   ```
+
+1. Create a container.
+
+   ```
+   cat << EOF | oc apply -f -
+   apiVersion: storage.azure.com/v1api20210401
+   kind: StorageAccountsBlobServicesContainer
+   metadata:
+     name: ${PROJECT_NAME}-container
+     namespace: $PROJECT_NAME
+   spec:
+     owner:
+       name: ostoystorage${MY_UUID}service
+   EOF
+   ```
+
+1. Confirm that the container was created. It make take a minute or two to appear.
+
+   ```
+   az storage container list --auth-mode login --account-name ostoystorage${MY_UUID} --query '[].name' -o tsv
+   ```
+
+1. Obtain the connection string of the Storage Account for use in the next section. The connection string contains all the information required to connect to the storage account. This should be guarded and securely stored. The --name parameter is the name of the Storage Account we created using the ASO.
+
+   ```
+   export CONNECTION_STRING=$(az storage account show-connection-string --name ostoystorage${MY_UUID} --resource-group ${PROJECT_NAME}-rg -o tsv)
+   ```
+
+The storage account is now set up for use with our application.
+
+#### Install Kubernetes Secret Store CSI
+
+In this part we will create a Key Vault location to store the connection string to our Storage account. Our application will use this to connect to the Blob Storage container we created, enabling it to display the contents, create new files, as well as display the contents of the files. We will mount this as a secret in a secure volume mount within our application. Our application will then read that to access the Blob storage.
+
+1. To simplify the process for the workshop, a script is provided that will do the prerequisite work in order to use Key Vault stored secrets. If you are curious, please feel free to read the script, otherwise just run it. This should take about 1-2 minutes to complete.
+
+   ```
+   curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/resources/setup-csi.sh | bash
+   ```
+   Or, if you’d rather not live on the edge, feel free to download it first.
+
+   >**NOTE:** Instead, you could connect your cluster to Azure ARC and use the [KeyVault extension](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/tutorial-akv-secrets-provider)
+
+
+1. Create an Azure Key Vault in the resource group we created using the ASO above.
+
+   ```
+   az keyvault create -n $KEYVAULT_NAME --resource-group ${PROJECT_NAME}-rg --location $REGION
+   ```
+
+1. Store the connection string as a secret in Key Vault.
+
+   ```
+   az keyvault secret set --vault-name $KEYVAULT_NAME --name connectionsecret --value $CONNECTION_STRING
+   ```
+
+1. Set an Access Policy for the Service Principal. This allows the Service Principal to get secrets from the Key Vault instance.
+
+   ```
+   az keyvault set-policy -n $KEYVAULT_NAME --secret-permissions get --spn $SERVICE_PRINCIPAL_CLIENT_ID
+   ```
+
+1. Create a secret for Kubernetes to use to access the Key Vault. When this command is executed, the Service Principal’s credentials are stored in the **secrets-store-creds** Secret object, where it can be used by the Secret Store CSI driver to authenticate with Azure Key Vault and retrieve secrets when needed.
+
+   ```
+   oc create secret generic secrets-store-creds -n $PROJECT_NAME --from-literal clientid=$SERVICE_PRINCIPAL_CLIENT_ID --from-literal clientsecret=$SERVICE_PRINCIPAL_CLIENT_SECRET
+   ```
+
+1. Create a label for the secret. By default, the secret store provider has filtered watch enabled on secrets. You can allow it to find the secret in the default configuration by adding this label to the secret.
+
+   ```
+   oc -n $PROJECT_NAME label secret secrets-store-creds secrets-store.csi.k8s.io/used=true
+   ```
+
+1. Create the Secret Provider Class to give access to this secret. To learn more about the fields in this class see [Secret Provider Class](https://learn.microsoft.com/en-us/azure/aks/hybrid/secrets-store-csi-driver#create-and-apply-your-own-secretproviderclass-object) object.
+
+   ```
+   cat <<EOF | oc apply -f -
+   apiVersion: secrets-store.csi.x-k8s.io/v1
+   kind: SecretProviderClass
+   metadata:
+     name: azure-kvname
+     namespace: $PROJECT_NAME
+   spec:
+     provider: azure
+     parameters:
+       usePodIdentity: "false"
+       useVMManagedIdentity: "false"
+       userAssignedIdentityID: ""
+       keyvaultName: "${KEYVAULT_NAME}"
+       objects: |
+         array:
+           - |
+             objectName: connectionsecret
+             objectType: secret
+             objectVersion: ""
+       tenantId: "${AZ_TENANT_ID}"
+   EOF
+   ```
+
+#### Create a custom Security Context Constraint (SCC)
+
+SCCs are outside the scope of this workshop. Though, in short, OpenShift SCCs are a mechanism for controlling the actions and resources that a pod or container can access in an OpenShift cluster. SCCs can be used to enforce security policies at the pod or container level, which helps to improve the overall security of an OpenShift cluster. For more details please see [Managing security context constraints](https://docs.openshift.com/container-platform/4.16/authentication/managing-security-context-constraints.html).
+
+1. Create a new SCC that will allow our OSToy app to use the Secrets Store Provider CSI driver. The SCC that is used by default, **restricted**, does not allow it. So in this custom SCC we are explicitly allowing access to CSI. If you are curious feel free to view the file first, the last line in specific.
+
+   ```
+   oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoyscc.yaml
+   ```
+
+1. Create a Service Account for the application.
+
+   ```
+   oc create sa ostoy-sa -n $PROJECT_NAME
+   ```
+
+1. Grant permissions to the Service Account using the custom SCC we just created.
+
+   ```
+   oc adm policy add-scc-to-user ostoyscc system:serviceaccount:${PROJECT_NAME}:ostoy-sa
+   ```
+
+#### Deploy the OSToy application
+
+1. Deploy the application. First deploy the microservice.
+
+   ```
+   oc apply -n $PROJECT_NAME -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml
+   ```
+
+1. Run the following to deploy the frontend. This will automatically remove the comment symbols for the new lines that we need in order to use the secret.
+
+   ```
+   curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml | sed 's/#//g' | oc apply -n $PROJECT_NAME -f -
+   ```
+
+#### See the storage contents through OSToy
+
+After about a minute we can use our app to see the contents of our Blob storage container.
+
+1. Get the route for the newly deployed application.
+
+   ```
+   oc get route ostoy-route -n $PROJECT_NAME -o jsonpath='{.spec.host}{"\n"}'
+   ```
+
+1. Open a new browser tab and enter the route from above. Ensure that it is using **http://** and not **https://**.
+
+1. A new menu item will appear. Click on “ASO - Blob Storage” in the left menu in OSToy.
+
+1. You will see a page that lists the contents of the bucket, which at this point should be empty.
+
+   ![](../media/managedlab/3.10-aso-blob-strg.png)
+
+1. Move on to the next step to add some files.
+
+#### Create files in your Azure Blob Storage Container
+
+For this step we will use OStoy to create a file and upload it to the Blob Storage Container. While Blob Storage can accept any kind of file, for this workshop we’ll use text files so that the contents can easily be rendered in the browser.
+
+1. Click on “ASO - Blob Storage” in the left menu in OSToy.
+
+1. Scroll down to the section underneath the “Existing files” section, titled “Upload a text file to Blob Storage”.
+
+1. Enter a file name for your file.
+
+1. Enter some content for your file.
+
+1. Click “Create file”.
+
+   ![](../media/managedlab/3.10-create-file.png)
+
+1. Scroll up to the top section for existing files and you should see your file that you just created there.
+
+1. Click on the file name to view the file.
+
+   ![](../media/managedlab/3.10-create-file-name.png)
+
+1. Now to confirm that this is not just some smoke and mirrors, let’s confirm directly via the CLI. Run the following to list the contents of our bucket.
+
+   ```
+   az storage blob list --account-name ostoystorage${MY_UUID} --connection-string $CONNECTION_STRING -c ${PROJECT_NAME}-container --query "[].name" -o tsv
+   ```
+
+   We should see our file(s) returned.
+
+
+
+
+
+
+
+
+
+
