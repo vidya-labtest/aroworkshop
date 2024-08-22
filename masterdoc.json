@@ -1,0 +1,21 @@
+[ 
+  {
+  "Name": "Azure Red Hat OpenShift",
+  "Language": "English",
+  "BaseURL": "https://github.com/CloudLabsAI-Azure/aroworkshop",
+  "Files": [
+     {
+        "RawFilePath": "https://raw.githubusercontent.com/CloudLabsAI-Azure/aroworkshop/master/_entries/CloudLabsDoc_Introduction.md",
+        "Order": 1
+     },
+     {
+        "RawFilePath": "https://raw.githubusercontent.com/CloudLabsAI-Azure/aroworkshop/master/_entries/Lab%201%20-%20Go%20Microservices.md",
+        "Order": 2
+     },
+     {
+        "RawFilePath": "https://raw.githubusercontent.com/CloudLabsAI-Azure/aroworkshop/master/_entries/Lab%202%20-%20ARO%20Internals.md",
+        "Order": 3
+     }
+   ]
+ }
+]
