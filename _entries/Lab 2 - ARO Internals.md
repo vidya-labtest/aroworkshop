@@ -971,13 +971,19 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
 
 1. Navigate to Azure portal and select **Resource groups**.
 
+   ![](../media/managedlab/resource-groups.png)
+
 1. On the **Create a resource group** tab, specify the following settings and click **Review + create** and **Create**.
 
    - Subscription: Select your default subscription
    - Resource group: **ostoy-app01-rg**
    - Region:
+  
+   ![](../media/managedlab/create-rg.png)
 
 1. In the search bar, search for storage and select **Storage accounts** and **Create** a new storage account.
+
+   ![](../media/managedlab/search-strg-acc.png)
 
 1. On the **Create a storage account** tab, specify the following settings and click **Next**.
 
@@ -988,18 +994,34 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
    - Primary workload: **Other**
    - Performance: **Standard**
    - Redundancy: **Locally-redundant storage (LRS)**
+  
+   ![](../media/managedlab/create-strg.png)
 
 1. On the **Advanced** tab, enable the **Allow enabling anonymous access on individual containers** and click **Review + create** and then **Create**.
 
+   ![](../media/managedlab/create-review-strg.png)
+
 1. Once the storage account deployment succeeds, click **Go to resource**.
+
+   ![](../media/managedlab/strg-go-to-resource.png)
 
 1. In the newly created storage account, navigate to **Data storage > Containers** settings and click **+ Container** to create new storage containers.
 
+   ![](../media/managedlab/strg-containers.png)
+
 1. Specify the new container name as **ostoystorageDIDservice**, select **Blob (anonymous read access for blobs only)** from the dropdown menu and click **Create**.
+
+   ![](../media/managedlab/strg-containers-blob.png)
 
 1. Create another container by specifying the container name as **ostoy-app01-container**, select **Container (anonymous read access for containers and blobs)** from the dropdown menu and click **Create**.
 
+   ![](../media/managedlab/strg-containers-container.png)
+
 1. In the storage account, navigate to **Security + Networking > Shared access signature**, enable all the permissions and click **Generate SAS and connection string** to create a new connection string and copy the **Connection string** value in a notepad. You will need this connection string value in the next tasks.
+
+   ![](../media/managedlab/strg-sas.png)
+
+   ![](../media/managedlab/strg-conn-string.png)
 
 1. The storage account is now set up for use with our application.
 
@@ -1018,6 +1040,8 @@ In this part we will create a Key Vault location to store the connection string 
 
 1. In the search bar, search for key vaults and select **Key vaults** and **Create** a new key vault.
 
+   ![](../media/managedlab/search-key-vaults.png)
+
 1. On the **Create a key vault** tab, specify the following settings and click **Next**.
 
    - Resource group: **ostoy-app01-rg**
@@ -1025,19 +1049,35 @@ In this part we will create a Key Vault location to store the connection string 
    - Region:
    - Pricing tier: **Standard**
   
-1. On the **Access configuration** tab, select **Vault access policy** as Permission model and click **+ Create** under Access policies
+   ![](../media/managedlab/key-vault-basics.png)
+  
+1. On the **Access configuration** tab, select **Vault access policy** as Permission model and click **+ Create** under Access policies.
+
+   ![](../media/managedlab/key-vault-access-policy.png)
 
 1. On the **Create an access policy > Permissions** tab, select all the permissions for **Secret permissions** and click **Next**.
 
+   ![](../media/managedlab/access-policy-permissions.png)
+
 1. On the **Principal** tab, search for the service principal **https://odl_user_sp_DID**, select it and click **Next**.
+
+   ![](../media/managedlab/access-policy-principal.png)
 
 1. On the **Review + create** tab, review the access policy settings and click **Create**.
 
+   ![](../media/managedlab/access-policy-create.png)
+
 1. Now that the access policies are set up, create the key vault. Once the key vault deployment succeeds, click **Go to resource**.
+
+   ![](../media/managedlab/key-vault-go-to-resource.png)
 
 1. In the newly created key vault, navigate to **Objects > Secrets** settings and click **+ Generate/Import** to create a new secret.
 
+   ![](../media/managedlab/key-vault-secrets.png)
+
 1. On the **Create a secret** tab, specify the name as **connectionsecret**, paste the storage account connection string from the previous task and click **Create**.
+
+   ![](../media/managedlab/key-vault-secrets-create.png)
 
 1. Create a secret for Kubernetes to use to access the Key Vault. When this command is executed, the Service Principal’s credentials are stored in the **secrets-store-creds** Secret object, where it can be used by the Secret Store CSI driver to authenticate with Azure Key Vault and retrieve secrets when needed.
 
