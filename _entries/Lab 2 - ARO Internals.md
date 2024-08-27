@@ -883,34 +883,28 @@ Set helper environment variables to facilitate execution of the commands in this
 ```
 export AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)
 export AZ_TENANT_ID=$(az account show -o tsv --query tenantId)
-export MY_UUID=$(uuidgen | cut -d - -f 2 | tr '[:upper:]' '[:lower:]')
-export PROJECT_NAME=ostoy-${MY_UUID}
-export KEYVAULT_NAME=secret-store-${MY_UUID}
+export PROJECT_NAME=ostoy-app01
+export KEYVAULT_NAME=keyvaultDID
 export REGION=<REGION>
+export SERVICE_PRINCIPAL_CLIENT_ID
+export SERVICE_PRINCIPAL_CLIENT_SECRET
 ```
 
-##### Create a service principal
+##### Install Helm
 
-If you don’t already have a Service Principal to use then we need to create one. It is recommended to create one with Contributor level permissions for this workshop so that the Azure Service Operator can create resources and that access can be granted to Key Vault.
-
-1. Create a service principal for use in the lab and store the client secret in an environment variable.
+1. Install Helm if you don’t already have it by running the below commands in the Azure cloudshell. You can also check the [Official Helm site](https://helm.sh/docs/intro/install/) for other install options.
 
    ```
-   export SERVICE_PRINCIPAL_CLIENT_SECRET="$(az ad sp create-for-rbac -n aro-lab-sp-${MY_UUID} --role contributor --scopes /subscriptions/$AZURE_SUBSCRIPTION_ID --query 'password' -o tsv)"
+   curl -LO https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz
+   tar -zxvf helm-v3.15.4-linux-amd64.tar.gz
    ```
 
-1. Get the service principal Client Id.
+1. Verify the Helm version installed.
 
    ```
-   export SERVICE_PRINCIPAL_CLIENT_ID="$(az ad sp list --display-name aro-lab-sp-${MY_UUID} --query '[0].appId' -o tsv)"
+   helm version
    ```
-
-1. Install Helm if you don’t already have it. You can also check the [Official Helm site](https://helm.sh/docs/intro/install/) for other install options.
-
-   ```
-   curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-   ```
-
+   
 ##### Install the Azure Service Operator - Set up ASO
 
 1. We first need to install Cert Manager. Run the following.
@@ -965,111 +959,55 @@ If you don’t already have a Service Principal to use then we need to create on
    azureserviceoperator-controller-manager-5b4bfc59df-lfpqf   2/2     Running   0          24s
    ```
 
-#### Create Storage Accounts and containers using the ASO
+#### Create Storage Accounts and containers using Azure portal
 
-Now we need to create a Storage Account for our Blob Storage, to use with OSToy. We could create this using the CLI or the Azure Portal, but wouldn’t it be nice if we could do so using standard Kubernetes objects? We could have defined the all these resources in once place (like in the deployment manifest), but for the purpose of gaining experience we will create each resource separately below.
+Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
 
-1. Create a new OpenShift project for our OSToy app (even if you already have one from earlier).
+1. First, create a new OpenShift project for our OSToy app (even if you already have one from earlier).
 
    ```
    oc new-project $PROJECT_NAME
    ```
 
-1. Create a resource group.
+1. Navigate to Azure portal and select **Resource groups**.
 
-   ```
-   cat << EOF | oc apply -f -
-   apiVersion: resources.azure.com/v1api20200601
-   kind: ResourceGroup
-   metadata:
-     name: ${PROJECT_NAME}-rg
-     namespace: $PROJECT_NAME
-   spec:
-     location: $REGION
-   EOF
-   ```
+1. On the **Create a resource group** tab, specify the following settings and click **Review + create** and **Create**.
 
-1. Confirm that the Resource Group was actually created. You will see the name returned. It may take a minute or two to appear.
+   - Subscription: Select your default subscription
+   - Resource group: **ostoy-app01-rg**
+   - Region:
 
-   ```
-   az group list --query '[].name' --output tsv | grep ${MY_UUID}
-   ```
+1. In the search bar, search for storage and select **Storage accounts** and **Create** a new storage account.
 
-1. Create a Storage Account.
+1. On the **Create a storage account** tab, specify the following settings and click **Next**.
 
-   ```
-   cat << EOF | oc apply -f -
-   apiVersion: storage.azure.com/v1api20210401
-   kind: StorageAccount
-   metadata:
-     name: ostoystorage${MY_UUID}
-     namespace: $PROJECT_NAME
-   spec:
-     location: $REGION
-     kind: BlobStorage
-     sku:
-       name: Standard_LRS
-     owner:
-       name: ${PROJECT_NAME}-rg
-     accessTier: Hot
-   EOF
-   ```
+   - Resource group: **ostoy-app01-rg**
+   - Storage account name: **ostoystorageDID**
+   - Region:
+   - Primary service: **Azure Blob Storage or Azure Data Lake Storage Gen 2**
+   - Primary workload: **Other**
+   - Performance: **Standard**
+   - Redundancy: **Locally-redundant storage (LRS)**
 
-1. Confirm that it was created. It may take a minute or two to appear.
+1. On the **Advanced** tab, enable the **Allow enabling anonymous access on individual containers** and click **Review + create** and then **Create**.
 
-   ```
-   az storage account list --query '[].name' --output tsv | grep ${MY_UUID}
-   ```
+1. Once the storage account deployment succeeds, click **Go to resource**.
 
-1. Create a Blob service.
+1. In the newly created storage account, navigate to **Data storage > Containers** settings and click **+ Container** to create new storage containers.
 
-   ```
-   cat << EOF | oc apply -f -
-   apiVersion: storage.azure.com/v1api20210401
-   kind: StorageAccountsBlobService
-   metadata:
-     name: ostoystorage${MY_UUID}service
-     namespace: $PROJECT_NAME
-   spec:
-     owner:
-       name: ostoystorage${MY_UUID}
-   EOF
-   ```
+1. Specify the new container name as **ostoystorageDIDservice**, select **Blob (anonymous read access for blobs only)** from the dropdown menu and click **Create**.
 
-1. Create a container.
+1. Create another container by specifying the container name as **ostoy-app01-container**, select **Container (anonymous read access for containers and blobs)** from the dropdown menu and click **Create**.
 
-   ```
-   cat << EOF | oc apply -f -
-   apiVersion: storage.azure.com/v1api20210401
-   kind: StorageAccountsBlobServicesContainer
-   metadata:
-     name: ${PROJECT_NAME}-container
-     namespace: $PROJECT_NAME
-   spec:
-     owner:
-       name: ostoystorage${MY_UUID}service
-   EOF
-   ```
+1. In the storage account, navigate to **Security + Networking > Shared access signature**, enable all the permissions and click **Generate SAS and connection string** to create a new connection string and copy the **Connection string** value in a notepad. You will need this connection string value in the next tasks.
 
-1. Confirm that the container was created. It make take a minute or two to appear.
-
-   ```
-   az storage container list --auth-mode login --account-name ostoystorage${MY_UUID} --query '[].name' -o tsv
-   ```
-
-1. Obtain the connection string of the Storage Account for use in the next section. The connection string contains all the information required to connect to the storage account. This should be guarded and securely stored. The --name parameter is the name of the Storage Account we created using the ASO.
-
-   ```
-   export CONNECTION_STRING=$(az storage account show-connection-string --name ostoystorage${MY_UUID} --resource-group ${PROJECT_NAME}-rg -o tsv)
-   ```
-
-The storage account is now set up for use with our application.
+1. The storage account is now set up for use with our application.
 
 #### Install Kubernetes Secret Store CSI
 
 In this part we will create a Key Vault location to store the connection string to our Storage account. Our application will use this to connect to the Blob Storage container we created, enabling it to display the contents, create new files, as well as display the contents of the files. We will mount this as a secret in a secure volume mount within our application. Our application will then read that to access the Blob storage.
 
-1. To simplify the process for the workshop, a script is provided that will do the prerequisite work in order to use Key Vault stored secrets. If you are curious, please feel free to read the script, otherwise just run it. This should take about 1-2 minutes to complete.
+1. To simplify the process for the workshop, a script is provided that will do the prerequisite work in order to use Key Vault stored secrets, run the below command in **CloudShell**. If you are curious, please feel free to read the script, otherwise just run it. This should take about 1-2 minutes to complete.
 
    ```
    curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/resources/setup-csi.sh | bash
@@ -1078,24 +1016,28 @@ In this part we will create a Key Vault location to store the connection string 
 
    >**NOTE:** Instead, you could connect your cluster to Azure ARC and use the [KeyVault extension](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/tutorial-akv-secrets-provider)
 
+1. In the search bar, search for key vaults and select **Key vaults** and **Create** a new key vault.
 
-1. Create an Azure Key Vault in the resource group we created using the ASO above.
+1. On the **Create a key vault** tab, specify the following settings and click **Next**.
 
-   ```
-   az keyvault create -n $KEYVAULT_NAME --resource-group ${PROJECT_NAME}-rg --location $REGION
-   ```
+   - Resource group: **ostoy-app01-rg**
+   - Key vault name: **keyvaultDID**
+   - Region:
+   - Pricing tier: **Standard**
+  
+1. On the **Access configuration** tab, select **Vault access policy** as Permission model and click **+ Create** under Access policies
 
-1. Store the connection string as a secret in Key Vault.
+1. On the **Create an access policy > Permissions** tab, select all the permissions for **Secret permissions** and click **Next**.
 
-   ```
-   az keyvault secret set --vault-name $KEYVAULT_NAME --name connectionsecret --value $CONNECTION_STRING
-   ```
+1. On the **Principal** tab, search for the service principal **https://odl_user_sp_DID**, select it and click **Next**.
 
-1. Set an Access Policy for the Service Principal. This allows the Service Principal to get secrets from the Key Vault instance.
+1. On the **Review + create** tab, review the access policy settings and click **Create**.
 
-   ```
-   az keyvault set-policy -n $KEYVAULT_NAME --secret-permissions get --spn $SERVICE_PRINCIPAL_CLIENT_ID
-   ```
+1. Now that the access policies are set up, create the key vault. Once the key vault deployment succeeds, click **Go to resource**.
+
+1. In the newly created key vault, navigate to **Objects > Secrets** settings and click **+ Generate/Import** to create a new secret.
+
+1. On the **Create a secret** tab, specify the name as **connectionsecret**, paste the storage account connection string from the previous task and click **Create**.
 
 1. Create a secret for Kubernetes to use to access the Key Vault. When this command is executed, the Service Principal’s credentials are stored in the **secrets-store-creds** Secret object, where it can be used by the Secret Store CSI driver to authenticate with Azure Key Vault and retrieve secrets when needed.
 
