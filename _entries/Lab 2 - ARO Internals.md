@@ -943,7 +943,10 @@ export SERVICE_PRINCIPAL_CLIENT_SECRET
 1. Install the ASO.
 
    ```
-   helm upgrade --install --devel aso2 aso2/azure-service-operator --create-namespace --namespace=azureserviceoperator-system --set azureSubscriptionID=$AZURE_SUBSCRIPTION_ID --set azureTenantID=$AZ_TENANT_ID --set azureClientID=$SERVICE_PRINCIPAL_CLIENT_ID --set azureClientSecret=$SERVICE_PRINCIPAL_CLIENT_SECRET
+   helm upgrade --install aso2 aso2/azure-service-operator \
+    --create-namespace \
+    --namespace=azureserviceoperator-system \
+    --set crdPattern='resources.azure.com/*;containerservice.azure.com/*;keyvault.azure.com/*;managedidentity.azure.com/*;eventhub.azure.com/*'
    ```
 
 1. Ensure that the pods are running successfully. This could take about 2 minutes.
@@ -1150,7 +1153,7 @@ SCCs are outside the scope of this workshop. Though, in short, OpenShift SCCs ar
 1. Run the following to deploy the frontend. This will automatically remove the comment symbols for the new lines that we need in order to use the secret.
 
    ```
-   curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml | sed 's/#//g' | oc apply -n $PROJECT_NAME -f -
+   curl https://raw.githubusercontent.com/openshift-cs/rosaworkshop/master/rosa-workshop/ostoy/yaml/ostoy-frontend-deployment.yaml | sed 's/#//g' | oc apply -n $PROJECT_NAME -f -
    ```
 
 #### See the storage contents through OSToy
