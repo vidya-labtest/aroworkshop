@@ -1047,6 +1047,8 @@ In this part we will create a Key Vault location to store the connection string 
    ```
    Or, if you’d rather not live on the edge, feel free to download it first.
 
+   >**NOTE:** This command might take more than expected time to execute completely. In this case, open cloudshell window in another browser/tab, login to the OpenShift console by running the **oc login** command and define the variables again under **Define helper variables** section of this task to proceed with the next steps.
+
    >**NOTE:** Instead, you could connect your cluster to Azure ARC and use the [KeyVault extension](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/tutorial-akv-secrets-provider)
 
 1. In the search bar, search for key vaults and select **Key vaults** and **Create** a new key vault.
