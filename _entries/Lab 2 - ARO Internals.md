@@ -1163,10 +1163,12 @@ SCCs are outside the scope of this workshop. Though, in short, OpenShift SCCs ar
 1. Run the following to deploy the frontend. This will automatically remove the comment symbols for the new lines that we need in order to use the secret.
 
    ```
-   curl https://raw.githubusercontent.com/openshift-cs/rosaworkshop/master/rosa-workshop/ostoy/yaml/ostoy-frontend-deployment.yaml | sed 's/#//g' | oc apply -n $PROJECT_NAME -f -
+   curl https://raw.githubusercontent.com/CloudLabsAI-Azure/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml | oc apply -n $PROJECT_NAME -f -
    ```
 
-#### See the storage contents through OSToy
+   >**Note:** To view the YAML file with comments https://raw.githubusercontent.com/openshift-cs/rosaworkshop/master/rosa-workshop/ostoy/yaml/ostoy-frontend-deployment.yaml
+
+#### See the storage contents through OSToy - READ-ONLY
 
 After about a minute we can use our app to see the contents of our Blob storage container.
 
@@ -1186,7 +1188,7 @@ After about a minute we can use our app to see the contents of our Blob storage 
 
 1. Move on to the next step to add some files.
 
-#### Create files in your Azure Blob Storage Container
+#### Create files in your Azure Blob Storage Container - READ-ONLY
 
 For this step we will use OStoy to create a file and upload it to the Blob Storage Container. While Blob Storage can accept any kind of file, for this workshop we’ll use text files so that the contents can easily be rendered in the browser.
 
