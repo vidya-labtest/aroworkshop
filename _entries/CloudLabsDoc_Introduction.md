@@ -80,7 +80,8 @@ In case you want to work from your own operating system, here are the links to t
 - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
 - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-mac.tar.gz
 
-#### GitHub Account
+### GitHub Account
+
 You'll need a personal GitHub account. You can sign up for free [here](https://github.com/join).
 
 ## 1.2 Basic concepts
