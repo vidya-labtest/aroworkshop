@@ -884,14 +884,18 @@ Below is an updated application diagram of what this will look like after comple
 
 Set helper environment variables to facilitate execution of the commands in this section. Replace <REGION> with the Azure region you are deploying into (ex: eastus or westus2).
 
+Replace the **{Application Id}** for SERVICE_PRINCIPAL_CLIENT_ID and **{Secret Key}** for SERVICE_PRINCIPAL_CLIENT_SECRET with the actual values by navigating to the **Environment > Service Principal Details** tab in your lab environment.
+
+![](../media/managedlab/spn-details.png)
+
 ```
 export AZURE_SUBSCRIPTION_ID=<inject key="Subscription ID" enableCopy="false"/>
 export AZ_TENANT_ID=<inject key="Tenant ID" enableCopy="false"/>
 export PROJECT_NAME=ostoy-app01
 export KEYVAULT_NAME=keyvault<inject key="Deployment ID" enableCopy="false"/>
 export REGION=<inject key="Region" enableCopy="false"/>
-export SERVICE_PRINCIPAL_CLIENT_ID=<inject key="GET-SERVICEPRINCIPAL-APPLICATION-ID" enableCopy="false"/>
-export SERVICE_PRINCIPAL_CLIENT_SECRET=<inject key="GET-SERVICEPRINCIPAL-SECRET" enableCopy="false"/>
+export SERVICE_PRINCIPAL_CLIENT_ID={Application Id}
+export SERVICE_PRINCIPAL_CLIENT_SECRET={Secret Key}
 ```
 
 ##### Install Helm
