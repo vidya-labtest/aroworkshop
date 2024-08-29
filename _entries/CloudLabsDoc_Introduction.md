@@ -28,7 +28,7 @@ Select **Bash** as your shell.
 
 ![](../media/cloudshell/select-bash.png)
 
-Select **Mount storage account** and click **Apply**.
+Select **Mount storage account**, your default **Subscription** and click **Apply**.
 
 ![](../media/cloudshell/mount-strg.png)
 
