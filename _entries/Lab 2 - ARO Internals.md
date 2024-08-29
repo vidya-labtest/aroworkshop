@@ -988,7 +988,7 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
 
    - Subscription: Select your default subscription
    - Resource group: **ostoy-app01-rg**
-   - Region:
+   - Region: **<inject key="Region" enableCopy="false"/>**
   
    ![](../media/managedlab/create-rg.png)
 
@@ -999,8 +999,8 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
 1. On the **Create a storage account** tab, specify the following settings and click **Next**.
 
    - Resource group: **ostoy-app01-rg**
-   - Storage account name: **ostoystorageDID**
-   - Region:
+   - Storage account name: **ostoystorage<inject key="Deployment ID" enableCopy="false"/>**
+   - Region: **<inject key="Region" enableCopy="false"/>**
    - Primary service: **Azure Blob Storage or Azure Data Lake Storage Gen 2**
    - Primary workload: **Other**
    - Performance: **Standard**
@@ -1020,7 +1020,7 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
 
    ![](../media/managedlab/strg-containers.png)
 
-1. Specify the new container name as **ostoystorageDIDservice**, select **Blob (anonymous read access for blobs only)** from the dropdown menu and click **Create**.
+1. Specify the new container name as **ostoystorage<inject key="Deployment ID" enableCopy="false"/>service**, select **Blob (anonymous read access for blobs only)** from the dropdown menu and click **Create**.
 
    ![](../media/managedlab/strg-containers-blob.png)
 
@@ -1056,8 +1056,8 @@ In this part we will create a Key Vault location to store the connection string 
 1. On the **Create a key vault** tab, specify the following settings and click **Next**.
 
    - Resource group: **ostoy-app01-rg**
-   - Key vault name: **keyvaultDID**
-   - Region:
+   - Key vault name: **keyvault<inject key="Deployment ID" enableCopy="false"/>**
+   - Region: **<inject key="Region" enableCopy="false"/>**
    - Pricing tier: **Standard**
   
    ![](../media/managedlab/key-vault-basics.png)
@@ -1070,7 +1070,7 @@ In this part we will create a Key Vault location to store the connection string 
 
    ![](../media/managedlab/access-policy-permissions.png)
 
-1. On the **Principal** tab, search for the service principal **https://odl_user_sp_DID**, select it and click **Next**.
+1. On the **Principal** tab, search for the service principal **https://odl_user_sp_<inject key="Deployment ID" enableCopy="false"/>**, select it and click **Next**.
 
    ![](../media/managedlab/access-policy-principal.png)
 
