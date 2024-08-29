@@ -26,17 +26,27 @@ Head over to <https://shell.azure.com> and sign in with your Azure Subscription 
 
 Select **Bash** as your shell.
 
-![Select Bash](../media/cloudshell/0-bash.png)
+![](../media/cloudshell/select-bash.png)
 
-Select **Show advanced settings**
+Select **Mount storage account** and click **Apply**.
 
-![Select show advanced settings](../media/cloudshell/1-mountstorage-advanced.png)
+![](../media/cloudshell/mount-strg.png)
 
-Set the **Storage account** and **File share** names to your resource group name (all lowercase, without any special characters). Leave other settings unchanged, then hit **Create storage**
+Select **I want to create a storage account** and click **Next**.
 
-![Azure Cloud Shell](../media/cloudshell/2-storageaccount-fileshare.png)
+![](../media/cloudshell/select-create-strg.png)
 
-You should now have access to the Azure Cloud Shell
+Specify then following values and click **Create** to create a new storage account.
+
+- Subscription: **Select your default subscription**
+- Resource group: **openshift**
+- Region: **<inject key="Region" enableCopy="false"/>**
+- Storage account name: **strg<inject key="Deployment-ID" enableCopy="false"/>**
+- File share: **none**
+
+![](../media/cloudshell/create-strg.png)
+
+You should now have access to the Azure Cloud Shell.
 
 ![Set the storage account and fileshare names](../media/cloudshell/3-cloudshell.png)
 
