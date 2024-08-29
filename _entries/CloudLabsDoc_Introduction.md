@@ -14,6 +14,66 @@ Some of the things you’ll be going through:
 
 You'll be doing the majority of the labs using the OpenShift CLI, but you can also accomplish them using the Azure Red Hat OpenShift web console.
 
+## Getting Started with Your Lab Environment
+ 
+Welcome to your Azure RedHat OpenShift Workshop! We've prepared a seamless environment for you to explore and learn about Azure services. Let's begin by making the most of this experience.
+ 
+## Accessing Your Lab Environment
+ 
+Once you're ready to dive in, your virtual machine and lab guide will be right at your fingertips within your web browser.
+
+  ![](../media/labguide01.png)
+
+### Virtual Machine & Lab Guide
+ 
+ Your virtual machine is your main tool throughout the workshop. The lab guide is your roadmap to success.
+ 
+## Exploring Your Lab Resources
+ 
+To get a better understanding of your lab resources and credentials, navigate to the **Environment** tab.
+ 
+  ![](../media/env-01.png)
+ 
+## Utilizing the Split Window Feature
+ 
+For convenience, you can open the lab guide in a separate window by clicking on the **Split Window** button in the top right corner.
+ 
+  ![](../media/split-01.png)
+ 
+## Managing Your Virtual Machine
+ 
+Feel free to **start, stop, or restart (2)** your virtual machine as needed from the **Resources (1)** tab. Your experience is in your hands!
+
+  ![](../media/resourses.png)
+
+## Let's Get Started with the Azure Portal
+ 
+1. On your virtual machine, click on the **Azure Portal (1)** icon, as shown below.
+ 
+    ![](../media/azure-portal-edge.png)
+
+1. On the **Sign in to Microsoft Azure** tab, you will see the login screen. In that, enter the following and click on **Next**. 
+
+   * **Email/Username**: <inject key="AzureAdUserEmail"></inject>
+   
+      ![](../media/user-email.png "Enter Email")
+     
+1. Next, enter the **password** and click on **Sign in**.
+   
+   * **Password**: <inject key="AzureAdUserPassword"></inject>
+   
+      ![](../media/user-pass.png "Enter Password")
+
+1. If you see the pop-up **Action Required**, click on **Ask Later**.
+
+   ![](../media/asklater.png)
+     
+1. Select **No,** if you see the pop-up, **Stay Signed in.**
+
+1. If you see the pop-up, **You have free Azure Advisor recommendations!** Close the window to continue the lab.
+
+1. If a **Welcome to Microsoft Azure** pop-up window appears, select **Maybe Later** to skip the tour.
+
 ## 1.1 Prerequisites
 
 ### Tools
@@ -163,5 +223,19 @@ A build is the process of transforming input parameters into a resulting object.
 OpenShift Container Platform leverages Kubernetes by creating Docker-formatted containers from build images and pushing them to a container image registry.
 
 Build objects share common characteristics: inputs for a build, the need to complete a build process, logging the build process, publishing resources from successful builds, and publishing the final status of the build. Builds take advantage of resource restrictions, specifying limitations on resources such as CPU usage, memory usage, and build or pod execution time.
+
+## Support Contact
+ 
+The CloudLabs support team is available 24/7, 365 days a year, via email and live chat to ensure seamless assistance at any time. We offer dedicated support channels tailored specifically for both learners and instructors, ensuring that all your needs are promptly and efficiently addressed.
+
+Learner Support Contacts:
+- Email Support: labs-support@spektrasystems.com
+- Live Chat Support: https://cloudlabs.ai/labs-support
+
+Now, click on **Next** from the lower right corner to move on to the next page.
+
+![](../media/lab-next.png)
+
+### Happy Learning!
 
 See here for more details: [https://docs.openshift.com/aro/4/openshift_images/image-streams-manage.html](https://docs.openshift.com/aro/4/openshift_images/image-streams-manage.html)
