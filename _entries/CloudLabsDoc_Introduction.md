@@ -22,7 +22,7 @@ Welcome to your Azure RedHat OpenShift Workshop! We've prepared a seamless envir
  
 Once you're ready to dive in, your virtual machine and lab guide will be right at your fingertips within your web browser.
 
-  ![](../media/labguide01.png)
+  ![](../media/lab-guide-aro.png)
 
 ### Virtual Machine & Lab Guide
  
