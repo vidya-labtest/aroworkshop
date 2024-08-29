@@ -159,7 +159,7 @@ NAME           HOST/PORT                                                      PA
 ostoy-route   ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io             ostoy-frontend-svc   <all>                   None
 ```
 
-Copy `ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io` above and paste it into your browser and press enter.  You should see the homepage of our application.
+Copy `ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io` above and paste it into your browser (use **http://**) and press enter. You should see the homepage of our application. 
 
 ![Home Page](../media/managedlab/10-ostoy-homepage.png)
 
@@ -178,6 +178,8 @@ Click in the message box for "Log Message (stderr)" and write any message you wa
 ### View logs directly from the pod
 
 Go to the CLI and enter the following command to retrieve the name of your frontend pod which we will use to view the pod logs:
+
+`oc get pods -o name`
 
 ```
 $ oc get pods -o name
@@ -413,6 +415,8 @@ OpenShift allows one to scale up/down the number of pods for each part of an app
 If we look at the tile on the left we should see one box randomly changing colors.  This box displays the randomly generated color sent to the frontend by our microservice along with the pod name that sent it. Since we see only one box that means there is only one microservice pod.  We will now scale up our microservice pods and will see the number of boxes change.
 
 To confirm that we only have one pod running for our microservice, run the following command, or use the web console.
+
+`oc get pods`
 
 ```
 $ oc get pods
@@ -881,13 +885,13 @@ Below is an updated application diagram of what this will look like after comple
 Set helper environment variables to facilitate execution of the commands in this section. Replace <REGION> with the Azure region you are deploying into (ex: eastus or westus2).
 
 ```
-export AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)
-export AZ_TENANT_ID=$(az account show -o tsv --query tenantId)
+export AZURE_SUBSCRIPTION_ID=<inject key="Subscription ID" enableCopy="false"/>
+export AZ_TENANT_ID=<inject key="Tenant ID" enableCopy="false"/>
 export PROJECT_NAME=ostoy-app01
-export KEYVAULT_NAME=keyvaultDID
-export REGION=<REGION>
-export SERVICE_PRINCIPAL_CLIENT_ID
-export SERVICE_PRINCIPAL_CLIENT_SECRET
+export KEYVAULT_NAME=keyvault<inject key="Deployment ID" enableCopy="false"/>
+export REGION=<inject key="Region" enableCopy="false"/>
+export SERVICE_PRINCIPAL_CLIENT_ID=<inject key="GET-SERVICEPRINCIPAL-APPLICATION-ID" enableCopy="false"/>
+export SERVICE_PRINCIPAL_CLIENT_SECRET=<inject key="GET-SERVICEPRINCIPAL-SECRET" enableCopy="false"/>
 ```
 
 ##### Install Helm
