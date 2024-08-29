@@ -43,7 +43,7 @@ The following example output shows the password will be in `kubeadminPassword`.
 }
 ```
 
-Save these secrets, you are going to use them to connect to the Web Portal
+Save these secrets in a notepad, you are going to use them to connect to the Web Portal.
 
 ## 2.3 Create Project
 
@@ -353,7 +353,7 @@ Notice the fully qualified domain name (FQDN) is comprised of the application na
 
 ### Try the service
 
-Open the hostname in your browser, you should see the rating app page. Play around, submit a few votes and check the leaderboard.
+Open the hostname in your browser, you should see the rating app page. Use **http://** port and not **https://** port to open the hostname in your browser. Play around, submit a few votes and check the leaderboard.
 
 ![rating-web homepage](../media/rating-web-homepage.png)
 
