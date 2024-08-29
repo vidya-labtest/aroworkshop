@@ -27,9 +27,6 @@ spec:
       labels:
         app: ostoy-frontend
     spec:
-      # Uncomment to use with ACK portion of the workshop
-      # If you chose a different service account name please replace it.
-      # serviceAccount: ostoy-sa
       containers:
         - name: ostoy-frontend
           securityContext:
