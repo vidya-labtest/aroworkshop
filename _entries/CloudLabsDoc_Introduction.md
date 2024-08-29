@@ -41,7 +41,7 @@ Specify then following values and click **Create** to create a new storage accou
 - Subscription: **Select your default subscription**
 - Resource group: **openshift**
 - Region: **<inject key="Region" enableCopy="false"/>**
-- Storage account name: **strg<inject key="Deployment-ID" enableCopy="false"/>**
+- Storage account name: **strg<inject key="Deployment ID" enableCopy="false"/>**
 - File share: **none**
 
 ![](../media/cloudshell/create-strg.png)
