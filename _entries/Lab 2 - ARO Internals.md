@@ -1237,6 +1237,10 @@ For this step we will use OStoy to create a file and upload it to the Blob Stora
 
    We should see our file(s) returned.
 
+## Summary
+
+You will cover an application overview, deployment, logging, metrics, health checks, persistent storage, configuration, networking, scaling, pod autoscaling, managing worker nodes, and using Azure Service Operator for Blob Store.
+
 ### You have successfully completed the lab
 
 
