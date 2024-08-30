@@ -2,6 +2,8 @@
 
 ### Estimated Duration: 120 minutes
 
+Azure Red Hat OpenShift (ARO) is a managed service on Azure for container orchestration. It supports automated updates, secure networking, and persistent storage. The OSToy app, used in the workshop, is deployed within this environment, showcasing ARO's capabilities.
+
 ## Lab Objectives
 
 You will be able to complete the following tasks:
