@@ -1,5 +1,22 @@
 # Lab 2 - ARO Internals
 
+### Estimated Duration: 120 minutes
+
+## Lab Objectives
+
+You will be able to complete the following tasks:
+
+- Task 1: Application Overview
+- Task 2: Application Deployment
+- Task 3: Logging and Metrics
+- Task 4: Exploring Health Checks
+- Task 5: Persistent Storage
+- Task 6: Configuration
+- Task 7: Networking and Scaling
+- Task 8: Pod Autoscaling
+- Task 9: Managing Worker Nodes
+- Task 10: Azure Service Operator - Blob Store
+
 ## 3.1 Application Overview
 
 ### Resources
@@ -1218,7 +1235,7 @@ For this step we will use OStoy to create a file and upload it to the Blob Stora
 
    We should see our file(s) returned.
 
-
+### You have successfully completed the lab
 
 
 
