@@ -1,6 +1,19 @@
 # Lab 1 - Go Microservices
 
+### Estimated Duration: 90 mins
+
 Now that you have your environment provisioned and the prerequisites fulfilled, it is time to start working on the labs.
+
+## Lab Objectives
+
+You will be able to complete the following tasks:
+
+- Task 1: Application Overview
+- Task 2: Create Project
+- Task 3: Deploy MongoDB
+- Task 4: Deploy Ratings API
+- Task 5: Deploy Ratings frontend
+- Task 6: Create Network Policy
 
 ## 2.1 Application Overview
 
@@ -455,3 +468,5 @@ Click **Create**.
 
 > **Resources**
 > * [ARO Documentation - Managing Networking with Network Policy](https://docs.openshift.com/aro/4/networking/network_policy/creating-network-policy.html)
+
+### You have successfully completed the lab
