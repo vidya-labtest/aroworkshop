@@ -1,10 +1,14 @@
 # Azure Red Hat OpenShift Workshop
 
+### Overall Estimated Duration: 4 hours
+
+## Overview
+
 [Azure Red Hat OpenShift](https://azure.microsoft.com/en-us/services/openshift/) is a fully managed Red Hat OpenShift service in Azure that is jointly engineered and supported by Microsoft and Red Hat. In this lab, you'll go through a set of tasks that will help you understand some of the concepts of deploying and securing container based applications on top of Azure Red Hat OpenShift.
 
-You can use this guide as an OpenShift tutorial and as study material to help you get started to learn OpenShift.
+## Objective
 
-Some of the things you’ll be going through:
+This lab is designed to equip participants with hands-on experience in insights on Azure RedHat OpenShift Cluster. By completing this lab, participants will learn to:
 
 - Creating a [project](https://docs.openshift.com/aro/4/applications/projects/working-with-projects.html) on the Azure Red Hat OpenShift Web Console
 - Deploying a MongoDB container that uses Azure Disks for [persistent storage](https://docs.openshift.com/aro/4/storage/understanding-persistent-storage.html)
@@ -14,67 +18,7 @@ Some of the things you’ll be going through:
 
 You'll be doing the majority of the labs using the OpenShift CLI, but you can also accomplish them using the Azure Red Hat OpenShift web console.
 
-## Getting Started with Your Lab Environment
- 
-Welcome to your Azure RedHat OpenShift Workshop! We've prepared a seamless environment for you to explore and learn about Azure services. Let's begin by making the most of this experience.
- 
-## Accessing Your Lab Environment
- 
-Once you're ready to dive in, your virtual machine and lab guide will be right at your fingertips within your web browser.
-
-  ![](../media/lab-guide-aro.png)
-
-### Virtual Machine & Lab Guide
- 
- Your virtual machine is your main tool throughout the workshop. The lab guide is your roadmap to success.
- 
-## Exploring Your Lab Resources
- 
-To get a better understanding of your lab resources and credentials, navigate to the **Environment** tab.
- 
-  ![](../media/env-01.png)
- 
-## Utilizing the Split Window Feature
- 
-For convenience, you can open the lab guide in a separate window by clicking on the **Split Window** button in the top right corner.
- 
-  ![](../media/split-01.png)
- 
-## Managing Your Virtual Machine
- 
-Feel free to **start, stop, or restart (2)** your virtual machine as needed from the **Resources (1)** tab. Your experience is in your hands!
-
-  ![](../media/resourses.png)
-
-## Let's Get Started with the Azure Portal
- 
-1. On your virtual machine, click on the **Azure Portal (1)** icon, as shown below.
- 
-    ![](../media/azure-portal-edge.png)
-
-1. On the **Sign in to Microsoft Azure** tab, you will see the login screen. In that, enter the following and click on **Next**. 
-
-   * **Email/Username**: <inject key="AzureAdUserEmail"></inject>
-   
-      ![](../media/user-email.png "Enter Email")
-     
-1. Next, enter the **password** and click on **Sign in**.
-   
-   * **Password**: <inject key="AzureAdUserPassword"></inject>
-   
-      ![](../media/user-pass.png "Enter Password")
-
-1. If you see the pop-up **Action Required**, click on **Ask Later**.
-
-   ![](../media/asklater.png)
-     
-1. Select **No,** if you see the pop-up, **Stay Signed in.**
-
-1. If you see the pop-up, **You have free Azure Advisor recommendations!** Close the window to continue the lab.
-
-1. If a **Welcome to Microsoft Azure** pop-up window appears, select **Maybe Later** to skip the tour.
-
-## 1.1 Prerequisites
+## Prerequisites
 
 ### Tools
 
@@ -144,7 +88,75 @@ In case you want to work from your own operating system, here are the links to t
 
 You'll need a personal GitHub account. You can sign up for free [here](https://github.com/join).
 
-## 1.2 Basic concepts
+## Architecture
+
+This lab manifests integrating ARO with several Azure services such as Azure Front Door + WAF for securely handling ingress traffic, Firewall for inspecting egress traffic to avoid data exfiltration, and Azure Active Directory for Role Based Access Control and so on.  Also, provides several recommended best practices for ARO deployment, from Networking best practices that supports multi-region growth, on-boarding the cluster on to Arc and enabling Container Insights to monitor the cluster and workload.
+
+## Architecture Diagram
+
+![](../media/ARO-arch-diagram.png)
+
+## Getting Started with Your Lab Environment
+ 
+Welcome to your Azure RedHat OpenShift Workshop! We've prepared a seamless environment for you to explore and learn about Azure services. Let's begin by making the most of this experience.
+ 
+## Accessing Your Lab Environment
+ 
+Once you're ready to dive in, your virtual machine and lab guide will be right at your fingertips within your web browser.
+
+  ![](../media/lab-guide-aro.png)
+
+### Virtual Machine & Lab Guide
+ 
+ Your virtual machine is your main tool throughout the workshop. The lab guide is your roadmap to success.
+ 
+## Exploring Your Lab Resources
+ 
+To get a better understanding of your lab resources and credentials, navigate to the **Environment** tab.
+ 
+  ![](../media/env-01.png)
+ 
+## Utilizing the Split Window Feature
+ 
+For convenience, you can open the lab guide in a separate window by clicking on the **Split Window** button in the top right corner.
+ 
+  ![](../media/split-01.png)
+ 
+## Managing Your Virtual Machine
+ 
+Feel free to **start, stop, or restart (2)** your virtual machine as needed from the **Resources (1)** tab. Your experience is in your hands!
+
+  ![](../media/resourses.png)
+
+## Let's Get Started with the Azure Portal
+ 
+1. On your virtual machine, click on the **Azure Portal (1)** icon, as shown below.
+ 
+    ![](../media/azure-portal-edge.png)
+
+1. On the **Sign in to Microsoft Azure** tab, you will see the login screen. In that, enter the following and click on **Next**. 
+
+   * **Email/Username**: <inject key="AzureAdUserEmail"></inject>
+   
+      ![](../media/user-email.png "Enter Email")
+     
+1. Next, enter the **password** and click on **Sign in**.
+   
+   * **Password**: <inject key="AzureAdUserPassword"></inject>
+   
+      ![](../media/user-pass.png "Enter Password")
+
+1. If you see the pop-up **Action Required**, click on **Ask Later**.
+
+   ![](../media/asklater.png)
+     
+1. Select **No,** if you see the pop-up, **Stay Signed in.**
+
+1. If you see the pop-up, **You have free Azure Advisor recommendations!** Close the window to continue the lab.
+
+1. If a **Welcome to Microsoft Azure** pop-up window appears, select **Maybe Later** to skip the tour.
+
+## Basic concepts
 
 ### Source-To-Image (S2I)
 
