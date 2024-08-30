@@ -469,4 +469,8 @@ Click **Create**.
 > **Resources**
 > * [ARO Documentation - Managing Networking with Network Policy](https://docs.openshift.com/aro/4/networking/network_policy/creating-network-policy.html)
 
+## Summary 
+
+You'll complete tasks including an application overview, creating a project, deploying MongoDB, the Ratings API and frontend, and establishing a network policy for secure communication.
+
 ### You have successfully completed the lab
