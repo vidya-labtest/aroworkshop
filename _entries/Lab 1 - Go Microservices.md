@@ -465,9 +465,16 @@ spec:
 ![Create network policy](../media/create-networkpolicy.png)
 
 Click **Create**.
+[ARO Documentation - Managing Networking with Network Policy](https://docs.openshift.com/aro/4/networking/network_policy/creating-network-policy.html)
 
-> **Resources**
-> * [ARO Documentation - Managing Networking with Network Policy](https://docs.openshift.com/aro/4/networking/network_policy/creating-network-policy.html)
+## Reference Links
+
+- [Project](https://docs.openshift.com/aro/4/applications/projects/working-with-projects.html)
+- [Persistent storage](https://docs.openshift.com/aro/4/storage/understanding-persistent-storage.html)
+- [Source-To-Image (S2I)](https://docs.openshift.com/aro/4/openshift_images/create-images.html)
+- [Routes](https://docs.openshift.com/aro/4/networking/routes/route-configuration.html)
+- [Network policy](https://docs.openshift.com/aro/4/networking/network_policy/about-network-policy.html)
+- [ARO Documentation - Managing Networking with Network Policy](https://docs.openshift.com/aro/4/networking/network_policy/creating-network-policy.html)
 
 ## Summary 
 
