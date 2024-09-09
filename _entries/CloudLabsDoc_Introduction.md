@@ -10,83 +10,24 @@
 
 This lab is designed to equip participants with hands-on experience in insights on Azure RedHat OpenShift Cluster. By completing this lab, participants will learn to:
 
-- Creating a [project](https://docs.openshift.com/aro/4/applications/projects/working-with-projects.html) on the Azure Red Hat OpenShift Web Console
-- Deploying a MongoDB container that uses Azure Disks for [persistent storage](https://docs.openshift.com/aro/4/storage/understanding-persistent-storage.html)
-- Deploying a Node JS API and frontend app from Git Hub using [Source-To-Image (S2I)](https://docs.openshift.com/aro/4/openshift_images/create-images.html)
-- Exposing the web application frontend using [Routes](https://docs.openshift.com/aro/4/networking/routes/route-configuration.html)
-- Creating a [network policy](https://docs.openshift.com/aro/4/networking/network_policy/about-network-policy.html) to control communication between the different tiers in the application
+- Creating a project on the Azure Red Hat OpenShift Web Console.
+- Deploying a MongoDB container that uses Azure Disks for persistent storage.
+- Deploying a Node JS API and frontend app from Git Hub using Source-To-Image (S2I).
+- Exposing the web application frontend using Routes.
+- Creating a network policy to control communication between the different tiers in the application.
 
 You'll be doing the majority of the labs using the OpenShift CLI, but you can also accomplish them using the Azure Red Hat OpenShift web console.
 
 ## Prerequisites
 
-### Tools
+Participants should have:
 
-#### Azure Cloud Shell
-
-You can use the Azure Cloud Shell accessible at <https://shell.azure.com> once you login with an Azure subscription.
-
-Head over to <https://shell.azure.com> and sign in with your Azure Subscription details.
-
-Select **Bash** as your shell.
-
-![](../media/cloudshell/select-bash.png)
-
-Select **Mount storage account**, your default **Subscription** and click **Apply**.
-
-![](../media/cloudshell/mount-strg.png)
-
-Select **I want to create a storage account** and click **Next**.
-
-![](../media/cloudshell/select-create-strg.png)
-
-Specify then following values and click **Create** to create a new storage account.
-
-- Subscription: **Select your default subscription**
-- Resource group: **openshift**
-- Region: **<inject key="Region" enableCopy="false"/>**
-- Storage account name: **strg<inject key="Deployment ID" enableCopy="false"/>**
-- File share: **none**
-
-![](../media/cloudshell/create-strg.png)
-
-You should now have access to the Azure Cloud Shell.
-
-![Set the storage account and fileshare names](../media/cloudshell/3-cloudshell.png)
-
-
-#### OpenShift CLI (oc)
-
-You'll need to download the **latest OpenShift CLI (oc)** client tools for OpenShift 4. You can follow the steps below on the Azure Cloud Shell.
-
-> **Note** You'll need to change the link below to the latest link you get from the page.
-> ![GitHub release links](../media/github-oc-release.png)
-
-Please run following commands on Azure Cloud Shell to download and setup the OpenShift client.
-
-```sh
-cd ~
-curl https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz > openshift-client-linux.tar.gz
-
-mkdir openshift
-
-tar -zxvf openshift-client-linux.tar.gz -C openshift
-
-echo 'export PATH=$PATH:~/openshift' >> ~/.bashrc && source ~/.bashrc
-
-```
-
-The OpenShift CLI (oc) is now installed.
-
-In case you want to work from your own operating system, here are the links to the different versions of CLI:
-
-- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-windows.zip
-- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
-- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-mac.tar.gz
-
-### GitHub Account
-
-You'll need a personal GitHub account. You can sign up for free [here](https://github.com/join).
+- **Basic Knowledge of Cloud Computing:** Understanding fundamental cloud concepts, especially related to Azure, will be beneficial.
+- **Familiarity with OpenShift:** A basic grasp of what OpenShift is and how it operates can help, though detailed experience is not always required.
+- **Experience with Linux Command Line:** Since OpenShift runs on Linux-based containers, knowing how to use the command line in a Linux environment is useful.
+- **Understanding of Containers and Kubernetes:** Familiarity with containerization concepts and Kubernetes basics is important as OpenShift is built on Kubernetes.
+- **Basic Programming or Scripting Skills:** Basic scripting skills (e.g., Bash, PowerShell) can be helpful for automating tasks and interacting with the environment.
+- **Azure Portal Navigation:** Comfort with navigating the Azure Portal, as well as understanding basic Azure services, will help participants manage and deploy resources effectively.
 
 ## Architecture
 
@@ -95,6 +36,19 @@ This lab manifests integrating ARO with several Azure services such as Azure Fro
 ## Architecture Diagram
 
 ![](../media/ARO-arch-diagram.png)
+
+## Explanation of Components
+
+The architecture for this lab involves several key components:
+
+- **Azure Red Hat OpenShift:** A fully managed OpenShift service on Azure, providing a platform to deploy, manage, and scale containerized applications.
+- **Azure Virtual Network (VNet):** Creates isolated and secure network environments for communication between Azure resources.
+- **Azure Storage Account:** Provides scalable storage solutions for various types of data, such as blobs, files, and queues, which applications running in OpenShift can use.
+- **Azure Key Vault:** Protects sensitive information like secrets, keys, and certificates used by applications and services.
+- **MongoDB Atlas:** A cloud-based database service providing a managed MongoDB environment, which can be integrated with OpenShift applications for data storage and management.
+- **Azure Load Balancer:** Distributes incoming network traffic across multiple servers to ensure high availability and reliability of applications running in the OpenShift cluster.
+- **Master Nodes:** The control plane components in the ARO cluster responsible for managing and orchestrating the worker nodes and overall cluster state.
+- **Worker Nodes:** The compute resources in the ARO cluster that run application containers and provide the processing power required for the workloads.
 
 ## Getting Started with Your Lab Environment
  
@@ -155,6 +109,72 @@ Feel free to **start, stop, or restart (2)** your virtual machine as needed from
 1. If you see the pop-up, **You have free Azure Advisor recommendations!** Close the window to continue the lab.
 
 1. If a **Welcome to Microsoft Azure** pop-up window appears, select **Maybe Later** to skip the tour.
+
+### Setup Azure Cloud Shell
+
+You can use the Azure Cloud Shell accessible at <https://shell.azure.com> once you login with an Azure subscription.
+
+Head over to <https://shell.azure.com> and sign in with your Azure Subscription details.
+
+1. Select **Bash** as your shell.
+
+   ![](../media/cloudshell/select-bash.png)
+
+1. Select **Mount storage account**, your default **Subscription** and click **Apply**.
+
+   ![](../media/cloudshell/mount-strg.png)
+
+1. Select **I want to create a storage account** and click **Next**.
+
+   ![](../media/cloudshell/select-create-strg.png)
+
+1. Specify then following values and click **Create** to create a new storage account.
+
+   - Subscription: **Select your default subscription**
+   - Resource group: **openshift**
+   - Region: **<inject key="Region" enableCopy="false"/>**
+   - Storage account name: **strg<inject key="Deployment ID" enableCopy="false"/>**
+   - File share: **none**
+
+   ![](../media/cloudshell/create-strg.png)
+
+1. You should now have access to the Azure Cloud Shell.
+
+   ![Set the storage account and fileshare names](../media/cloudshell/3-cloudshell.png)
+
+
+### OpenShift CLI (oc)
+
+You'll need to download the **latest OpenShift CLI (oc)** client tools for OpenShift 4. You can follow the steps below on the Azure Cloud Shell.
+
+> **Note** You'll need to change the link below to the latest link you get from the page.
+> ![GitHub release links](../media/github-oc-release.png)
+
+Please run following commands on Azure Cloud Shell to download and setup the OpenShift client.
+
+```sh
+cd ~
+curl https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz > openshift-client-linux.tar.gz
+
+mkdir openshift
+
+tar -zxvf openshift-client-linux.tar.gz -C openshift
+
+echo 'export PATH=$PATH:~/openshift' >> ~/.bashrc && source ~/.bashrc
+
+```
+
+The OpenShift CLI (oc) is now installed.
+
+In case you want to work from your own operating system, here are the links to the different versions of CLI:
+
+- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-windows.zip
+- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
+- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-mac.tar.gz
+
+### GitHub Account
+
+You'll need a personal GitHub account. You can sign up for free [here](https://github.com/join).
 
 ## Basic concepts
 
