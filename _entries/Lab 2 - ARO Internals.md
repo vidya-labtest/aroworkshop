@@ -1237,6 +1237,17 @@ For this step we will use OStoy to create a file and upload it to the Blob Stora
 
    We should see our file(s) returned.
 
+## Reference Links
+
+- [Access modes](https://docs.openshift.com/container-platform/latest/storage/understanding-persistent-storage.html#pv-access-modes_understanding-persistent-storage)
+- [ConfigMaps](https://docs.openshift.com/container-platform/latest/nodes/pods/nodes-pods-configmaps.html)
+- [Secrets](https://docs.openshift.com/container-platform/latest/cicd/builds/creating-build-inputs.html#builds-input-secrets-configmaps_creating-build-inputs)
+- [Environment Variables](https://docs.openshift.com/container-platform/3.11/dev_guide/environment_variables.html)
+- [OVS-networkpolicy](https://docs.openshift.com/container-platform/latest/networking/network_policy/about-network-policy.html#nw-networkpolicy-about_about-network-policy)
+- [Horizontal Pod Autoscaler](https://docs.openshift.com/container-platform/latest/nodes/pods/nodes-pods-autoscaling.html)
+- [Overview of machine management](https://docs.openshift.com/container-platform/4.16/machine_management/index.html)
+- [Azure Service Operator](https://azure.github.io/azure-service-operator/)
+
 ## Summary
 
 You will cover an application overview, deployment, logging, metrics, health checks, persistent storage, configuration, networking, scaling, pod autoscaling, managing worker nodes, and using Azure Service Operator for Blob Store.
