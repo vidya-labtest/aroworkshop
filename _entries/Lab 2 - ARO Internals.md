@@ -1149,6 +1149,8 @@ In this part we will create a Key Vault location to store the connection string 
    EOF
    ```
 
+<validation step="58614025-40b6-49fa-ac36-a00931c3dae0" />
+
 #### Create a custom Security Context Constraint (SCC)
 
 SCCs are outside the scope of this workshop. Though, in short, OpenShift SCCs are a mechanism for controlling the actions and resources that a pod or container can access in an OpenShift cluster. SCCs can be used to enforce security policies at the pod or container level, which helps to improve the overall security of an OpenShift cluster. For more details please see [Managing security context constraints](https://docs.openshift.com/container-platform/4.16/authentication/managing-security-context-constraints.html).
