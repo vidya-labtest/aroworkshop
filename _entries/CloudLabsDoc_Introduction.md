@@ -142,6 +142,7 @@ Head over to <https://shell.azure.com> and sign in with your Azure Subscription 
 
    ![Set the storage account and fileshare names](../media/cloudshell/3-cloudshell.png)
 
+<validation step="e4da372d-001a-4680-ba58-23f917916623" />
 
 ### OpenShift CLI (oc)
 
