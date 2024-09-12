@@ -15,7 +15,7 @@ You will be able to complete the following tasks:
 - Task 5: Deploy Ratings frontend
 - Task 6: Create Network Policy
 
-## 2.1 Application Overview
+## Task 1: Application Overview
 
 You will be deploying a ratings application on Azure Red Hat OpenShift.
 
@@ -35,7 +35,7 @@ Once you're done, you'll have an experience similar to the below.
 ![Application](../media/app-overview-2.png)
 ![Application](../media/app-overview-3.png)
 
-## 2.2 Connect to the cluster
+## Task 2: Connect to the cluster
 
 You can log into the cluster using the `kubeadmin` user.  
 
@@ -58,7 +58,7 @@ The following example output shows the password will be in `kubeadminPassword`.
 
 Save these secrets in a notepad, you are going to use them to connect to the Web Portal.
 
-## 2.3 Create Project
+## Task 3: Create Project
 
 ### Login to the web console
 
@@ -108,7 +108,7 @@ oc new-project workshop
 > * [ARO Documentation - Getting started with the CLI](https://docs.openshift.com/aro/4/cli_reference/openshift_cli/getting-started-cli.html)
 > * [ARO Documentation - Projects](https://docs.openshift.com/aro/4/applications/projects/working-with-projects.html)
 
-## 2.4 Deploy MongoDB
+## Task 4: Deploy MongoDB
 
 ### Create mongoDB from Docker hub
 
@@ -154,7 +154,7 @@ You can also retrieve this from the web console. You'll need this hostname to co
 
 ![MongoDB service in the Web Console](../media/mongo-svc-webconsole.png)
 
-## 2.5 Deploy Ratings API
+## Task 5: Deploy Ratings API
 
 The `rating-api` is a NodeJS application that connects to mongoDB to retrieve and rate items. Below are some of the details that you'll need to deploy this.
 
@@ -250,7 +250,7 @@ Now, whenever you push a change to your GitHub repository, a new build will auto
 > **Resources**
 > * [ARO Documentation - Triggering builds](https://docs.openshift.com/aro/4/builds/triggering-builds-build-hooks.html)
 
-## 2.6 Deploy Ratings frontend
+## Task 6: Deploy Ratings frontend
 
 The `rating-web` is a NodeJS application that connects to the `rating-api`. Below are some of the details that you'll need to deploy this.
 
@@ -427,7 +427,7 @@ Immediately, go to the **Builds** tab in the OpenShift Web Console. You'll see a
 > **Resources**
 > * [ARO Documentation - Triggering builds](https://docs.openshift.com/aro/4/builds/triggering-builds-build-hooks.html)
 
-## 2.7 Create Network Policy
+## Task 7: Create Network Policy
 
 Now that you have the application working, it is time to apply some security hardening. You'll use [network policies](https://docs.openshift.com/aro/4/networking/network_policy/about-network-policy.html) to restrict communication to the `rating-api`.
 
