@@ -19,7 +19,7 @@ You will be able to complete the following tasks:
 - Task 9: Managing Worker Nodes
 - Task 10: Azure Service Operator - Blob Store
 
-## 3.1 Application Overview
+## Task 1: Application Overview
 
 ### Resources
 
@@ -68,7 +68,7 @@ To learn more, click on the "About" menu item on the left once we deploy the app
 
 ![ostoy About](../media/managedlab/5-ostoy-about.png)
 
-## 3.2 Application Deployment
+## Task 2: Application Deployment
 
 ### Retrieve login command
 
@@ -182,7 +182,7 @@ Copy `ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io` above and paste it into
 
 ![Home Page](../media/managedlab/10-ostoy-homepage.png)
 
-## 3.3 Logging and Metrics
+## Task 3: Logging and Metrics
 
 Assuming you can access the application via the Route provided and are still logged into the CLI (please go back to part 2 if you need to do any of those) we'll start to use this application.  As stated earlier, this application will allow you to "push the buttons" of OpenShift and see how it works.  We will do this to test the logs.
 
@@ -223,7 +223,7 @@ Try to see them from within the OpenShift Web Console as well. Make sure you are
 
 ![web-pods](../media/managedlab/9-ostoy-wclogs.png)
 
-## 3.4 Exploring Health Checks
+## Task 4: Exploring Health Checks
 
 In this section we will intentionally crash our pods and also make a pod non-responsive to the liveness probes and see how Kubernetes behaves.  We will first intentionally crash our pod and see that Kubernetes will self-heal by immediately spinning it back up. Then we will trigger the health check by stopping the response on the `/health` endpoint in our app. After three consecutive failures, Kubernetes should kill the pod and then recreate it.
 
@@ -260,7 +260,7 @@ This will cause the app to stop responding with a "200 HTTP code". After 3 such 
 
 ![Pod Events2](../media/managedlab/16-ostoy-podevents2.png)
 
-## 3.5 Persistent Storage
+## Task 5: Persistent Storage
 
 In this section we will execute a simple example of using persistent storage by creating a file that will be stored on a persistent volume in our cluster and then confirm that it will "persist" across pod failures and recreation.
 
@@ -323,7 +323,7 @@ Azure Red Hat OpenShift is the greatest thing since sliced bread!
 
 Then exit the SSH session by typing `exit`. You will then be in your CLI.
 
-## 3.6 Configuration
+## Task 6: Configuration
 
 In this section we'll take a look at how OSToy can be configured using [ConfigMaps](https://docs.openshift.com/container-platform/latest/nodes/pods/nodes-pods-configmaps.html), [Secrets](https://docs.openshift.com/container-platform/latest/cicd/builds/creating-build-inputs.html#builds-input-secrets-configmaps_creating-build-inputs), and [Environment Variables](https://docs.openshift.com/container-platform/3.11/dev_guide/environment_variables.html).  This section won't go into details explaining each (the links above are for that), but will show you how they are exposed to the application.  
 
@@ -388,7 +388,7 @@ This will display the environment variables available to the OSToy application. 
 
 The last one, `MICROSERVICE_NAME` is used for the intra-cluster communications between pods for this application.  The application looks for this environment variable to know how to access the microservice in order to get the colors.
 
-## 3.7 Networking and Scaling
+## Task 7: Networking and Scaling
 
 In this section we'll see how OSToy uses intra-cluster networking to separate functions by using microservices and visualize the scaling of pods.
 
@@ -484,7 +484,7 @@ Lastly, let's use the web console to scale back down to one pod.  Make sure you 
 
 See this visually by visiting the OSToy app and seeing how many boxes you now see.  It should be one.  You can also confirm this via the CLI or the web console.
 
-## 3.8 Pod Autoscaling
+## Task 8: Pod Autoscaling
 
 In this section we will explore how the [Horizontal Pod Autoscaler](https://docs.openshift.com/container-platform/latest/nodes/pods/nodes-pods-autoscaling.html) (HPA) can be used and works within Kubernetes/OpenShift.
 
@@ -554,7 +554,7 @@ Wait a few minutes and colorful graphs will appear showing resource usage across
 
 At this point feel free to go back to the [logging section](#lab2-logging) to view this data through Container Insights for Azure Arc-enabled Kubernetes clusters.
 
-## 3.9 Managing Worker Nodes
+## Task 9: Managing Worker Nodes
 
 There may be times when you need to change aspects of your worker nodes. Things like scaling, changing the type, adding labels or taints to name a few. Most of these things are done through the use of machine sets. A machine is a unit that describes the host for a node and a machine set is a group of machines. Think of a machine set as a “template” for the kinds of machines that make up the worker nodes of your cluster. Similar to how a replicaset is to pods. A machine set allows users to manage many machines as a single entity though it is contained to a specific availability zone. If you’d like to learn more see [Overview of machine management](https://docs.openshift.com/container-platform/4.16/machine_management/index.html)
 
@@ -854,7 +854,7 @@ You can see that the label is now there.
 
 ![](../media/managedlab/3.9-nodes-frontend-5.png)
 
-## 3.10 Azure Service Operator - Blob Store
+## Task 10: Azure Service Operator - Blob Store
 
 ### Integrating with Azure services
 
