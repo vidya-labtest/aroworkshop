@@ -1,4 +1,4 @@
-# Azure Red Hat OpenShift Workshop
+# Azure RedHat OpenShift Workshop
 
 ### Overall Estimated Duration: 4 hours
 
