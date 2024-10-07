@@ -124,7 +124,11 @@ oc new-app bitnami/mongodb \
   -e MONGODB_ROOT_PASSWORD=ratingspassword
 ```
 
-If you now head back to the web console, and switch to the **workshop** project, you should see a new deployment for mongoDB.
+Now head back to the web console and switch to **Developer** settings from the top left corner of your openshift web console.
+
+![Developer settings](../media/developer-settings.png)
+
+Switch to the **workshop** project, you should see a new deployment for mongoDB.
 
 ![MongoDB deployment](../media/mongodb-overview.png)
 
