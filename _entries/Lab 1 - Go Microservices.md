@@ -154,7 +154,9 @@ oc get svc mongodb
 
 The service will be accessible at the following DNS name: `mongodb.workshop.svc.cluster.local` which is formed of `[service name].[project name].svc.cluster.local`. This resolves only within the cluster.
 
-You can also retrieve this from the web console. You'll need this hostname to configure the `rating-api`.
+Copy and paste the **CLUSTER IP** os the mongodb service, you'll need this IP addrress to import the ratings data in the next task to configure the `rating-api`.
+
+You can also retrieve this from the web console. 
 
 ![MongoDB service in the Web Console](../media/mongo-svc-webconsole.png)
 
@@ -204,6 +206,53 @@ If you navigate to the logs of the `rating-api` deployment, you should see a log
 For that, in the deployment's details screen, click on *Pods* tab, then on one of the pods
 
 ![Verify mongoDB connection](../media/rating-api-working.png)
+
+### Load data into Mongodb database
+
+Clone the `ratings-api` repo by running the following command and navigate into the specific directory.
+
+```sh
+git clone https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api
+cd mslearn-aks-workshop-ratings-api/
+```
+
+Get the pods. You'll specifically use the mongodb pod name to connect to the remote shell on the pod.
+
+```sh
+oc get pods
+```
+
+Copy the data folder into the mongoDB pod. Replace the **$MONGODB-POD-NAME** with the actual pod name.
+
+```sh
+oc cp ./data $MONGODB-POD-NAME:/tmp/
+```
+
+Connect to the remote shell on the pod. Replace the **$MONGODB-POD-NAME** with the actual pod name.
+
+```sh
+oc rsh $MONGODB-POD-NAME
+```
+
+Run the `mongoimport` command to import the JSON data files into the database. Replace the **$MONGODB-CLUSTER-IP** with the actual mongodb service when you ran the command `oc get svc mongodb` in the previous task and verify that all the documents have been imported successfully.
+
+```sh
+mongoimport --host $MONGODB-CLUSTER-IP --username ratingsuser --password ratingspassword --db ratingsdb --collection items --type json --file /tmp/data/items.json --jsonArray
+```
+
+```sh
+mongoimport --host $MONGODB-CLUSTER-IP --username ratingsuser --password ratingspassword --db ratingsdb --collection sites --type json --file /tmp/data/sites.json --jsonArray
+```
+
+```sh
+mongoimport --host $MONGODB-CLUSTER-IP --username ratingsuser --password ratingspassword --db ratingsdb --collection ratings --type json --file /tmp/data/ratings.json --jsonArray
+```
+
+Exit the remote shell.
+
+```sh
+exit
+```
 
 ### Retrieve `rating-api` service hostname
 
@@ -255,6 +304,20 @@ Now, whenever you push a change to your GitHub repository, a new build will auto
 
 > **Resources**
 > * [ARO Documentation - Triggering builds](https://docs.openshift.com/aro/4/builds/triggering-builds-build-hooks.html)
+
+### Update rating-api Target Port
+
+Run the following command to edit the `rating-api` service runinng on the namepsace/project named **workshop**.
+
+```sh
+oc edit svc rating-api -n workshop
+```
+
+You'll now update the 8080 port to `3000` port.
+
+Press **i** to edit the file, update the port number to **3000**. Once updated, press *Esc* to ensure you are in Normal mode and type **:wq** and press *Enter*. This writes (saves) the changes and quits.
+
+You should be able to see that the `rating-api` servie is now edited.
 
 ## Task 6: Deploy Ratings frontend
 
