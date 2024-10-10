@@ -222,6 +222,8 @@ Get the pods. You'll specifically use the mongodb pod name to connect to the rem
 oc get pods
 ```
 
+![](../media/oc-get-pods.png)
+
 Copy the data folder into the mongoDB pod. Replace the **$MONGODB-POD-NAME** with the actual pod name.
 
 ```sh
@@ -233,6 +235,8 @@ Connect to the remote shell on the pod. Replace the **$MONGODB-POD-NAME** with t
 ```sh
 oc rsh $MONGODB-POD-NAME
 ```
+
+![](../media/oc-rsh.png)
 
 Run the `mongoimport` command to import the JSON data files into the database. Replace the **$MONGODB-CLUSTER-IP** with the actual mongodb service when you ran the command `oc get svc mongodb` in the previous task and verify that all the documents have been imported successfully.
 
@@ -248,7 +252,9 @@ mongoimport --host $MONGODB-CLUSTER-IP --username ratingsuser --password ratings
 mongoimport --host $MONGODB-CLUSTER-IP --username ratingsuser --password ratingspassword --db ratingsdb --collection ratings --type json --file /tmp/data/ratings.json --jsonArray
 ```
 
-Exit the remote shell.
+![](../media/import-data.png)
+
+`Exit` the remote shell.
 
 ```sh
 exit
@@ -315,9 +321,15 @@ oc edit svc rating-api -n workshop
 
 You'll now update the 8080 port to `3000` port.
 
+![](../media/edit-port-8080.png)
+
 Press **i** to edit the file, update the port number to **3000**. Once updated, press *Esc* to ensure you are in Normal mode and type **:wq** and press *Enter*. This writes (saves) the changes and quits.
 
+![](../media/port-3000.png)
+
 You should be able to see that the `rating-api` service is now edited.
+
+![](../media/rating-api-edited.png)
 
 ## Task 6: Deploy Ratings frontend
 
