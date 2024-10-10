@@ -39,7 +39,7 @@ Once you're done, you'll have an experience similar to the below.
 
 You can log into the cluster using the `kubeadmin` user.  
 
-Run the following command to find the password for the `kubeadmin` user. Replace $CLUSTER_NAME with your OpenShift cluster name and $RESOURCE_GROUP_NAME with the resource group name
+Run the following command to find the password for the `kubeadmin` user. Replace $CLUSTER_NAME with **ARO<inject key="Deployment ID" enableCopy="false"/>** (your OpenShift cluster name) and $RESOURCE_GROUP_NAME with **openshift** (the resource group name).
 
 ```azurecli-interactive
 az aro list-credentials \
