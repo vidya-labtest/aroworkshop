@@ -1,4 +1,4 @@
-# Azure RedHat OpenShift Workshop
+# Azure Red Hat OpenShift Workshop
 
 ### Overall Estimated Duration: 4 hours
 
@@ -8,7 +8,7 @@ Azure Red Hat OpenShift is a fully managed Red Hat OpenShift service in Azure th
 
 ## Objective
 
-This lab is designed to equip participants with hands-on experience in insights on Azure RedHat OpenShift Cluster. By completing this lab, participants will learn to:
+This lab is designed to equip participants with hands-on experience in insights on Azure Red Hat OpenShift Cluster. By completing this lab, participants will learn to:
 
 - Creating a project on the Azure Red Hat OpenShift Web Console.
 - Deploying a MongoDB container that uses Azure Disks for persistent storage.
