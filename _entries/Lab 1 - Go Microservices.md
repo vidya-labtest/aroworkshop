@@ -317,7 +317,7 @@ You'll now update the 8080 port to `3000` port.
 
 Press **i** to edit the file, update the port number to **3000**. Once updated, press *Esc* to ensure you are in Normal mode and type **:wq** and press *Enter*. This writes (saves) the changes and quits.
 
-You should be able to see that the `rating-api` servie is now edited.
+You should be able to see that the `rating-api` service is now edited.
 
 ## Task 6: Deploy Ratings frontend
 
