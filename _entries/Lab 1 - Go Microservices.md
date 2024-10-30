@@ -9,11 +9,12 @@ Microservices is an architectural style where applications are composed of small
 You will be able to complete the following tasks:
 
 - Task 1: Application Overview
-- Task 2: Create Project
-- Task 3: Deploy MongoDB
-- Task 4: Deploy Ratings API
-- Task 5: Deploy Ratings frontend
-- Task 6: Create Network Policy
+- Task 2: Connect to the cluster
+- Task 3: Create Project
+- Task 4: Deploy MongoDB
+- Task 5: Deploy Ratings API
+- Task 6: Deploy Ratings frontend
+- Task 7: Create Network Policy
 
 ## Task 1: Application Overview
 
