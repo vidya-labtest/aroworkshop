@@ -9,11 +9,12 @@ Microservices is an architectural style where applications are composed of small
 You will be able to complete the following tasks:
 
 - Task 1: Application Overview
-- Task 2: Create Project
-- Task 3: Deploy MongoDB
-- Task 4: Deploy Ratings API
-- Task 5: Deploy Ratings frontend
-- Task 6: Create Network Policy
+- Task 2: Connect to the cluster
+- Task 3: Create Project
+- Task 4: Deploy MongoDB
+- Task 5: Deploy Ratings API
+- Task 6: Deploy Ratings frontend
+- Task 7: Create Network Policy
 
 ## Task 1: Application Overview
 
@@ -101,7 +102,7 @@ A project allows a community of users to organize and manage their content in is
 oc new-project workshop
 ```
 
-![Create new project](../media/oc-newproject.png)
+![Create new project](../media/lab1-task3-1.png)
 
 > **Resources**
 
@@ -128,9 +129,12 @@ Now head back to the web console and switch to **Developer** settings from the t
 
 ![Developer settings](../media/developer-settings.png)
 
+>**Note:** If you see Welcome to the Developer Perspective!. You can choose **Skip tour**
+
 Switch to the **workshop** project, you should see a new deployment for mongoDB.
 
 ![MongoDB deployment](../media/mongodb-overview.png)
+
 
 ### Verify if the mongoDB pod was created successfully
 

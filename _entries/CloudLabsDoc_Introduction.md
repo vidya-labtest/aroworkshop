@@ -108,7 +108,7 @@ Feel free to **start, stop, or restart (2)** your virtual machine as needed from
 
 1. If you see the pop-up, **You have free Azure Advisor recommendations!** Close the window to continue the lab.
 
-1. If a **Welcome to Microsoft Azure** pop-up window appears, select **Maybe Later** to skip the tour.
+1. If a **Welcome to Microsoft Azure** pop-up window appears, select **Cancel** to skip the tour.
 
 ### Setup Azure Cloud Shell
 
