@@ -78,7 +78,7 @@ If not logged in via the CLI, click on the dropdown arrow next to your name in t
 
 A new tab will open click "Display Token"
 
-Copy the command under where it says "Log in with this token". Then go to your terminal and paste that command and press enter. You will see a similar confirmation message if you successfully logged in.
+Copy the command under where it says, "Log in with this token". Then go to your terminal and paste that command and press enter. You will see a similar confirmation message if you successfully logged in.
 
 ```
 $ oc login --token=sha256~qWBXdQ_X_4wWZor0XZO00ZZXXXXXXXXXXXX --server=https://api.abcs1234.westus.aroapp.io:6443
@@ -113,7 +113,7 @@ Equivalently you can also create this new project using the web console by selec
 
 View the Kubernetes deployment object YAMLs.  If you wish you can download them from the following locations to your Azure Cloud Shell, to your local machine, or just use the direct link in the next steps.
 
-Feel free to open them up and take a look at what we will be deploying. For simplicity of this lab we have placed all the Kubernetes objects we are deploying in one "all-in-one" YAML file.  Though in reality there are benefits (ease of maintenance and less risk) to separating these out into individual files.
+Feel free to open them up and take a look at what we will be deploying. For simplicity of this lab, we have placed all the Kubernetes objects we are deploying in one "all-in-one" YAML file.  Though in reality there are benefits (ease of maintenance and less risk) to separating these out into individual files.
 
 [ostoy-frontend-deployment.yaml](https://github.com/microsoft/aroworkshop/blob/master/yaml/ostoy-frontend-deployment.yaml)
 
@@ -206,7 +206,7 @@ pod/ostoy-frontend-679cb85695-5cn7x
 pod/ostoy-microservice-86b4c6f559-p594d
 ```
 
-So the pod name in this case is **ostoy-frontend-679cb85695-5cn7x**.  Then run `oc logs ostoy-frontend-679cb85695-5cn7x` and you should see your messages:
+So, the pod name in this case is **ostoy-frontend-679cb85695-5cn7x**.  Then run `oc logs ostoy-frontend-679cb85695-5cn7x` and you should see your messages:
 
 ```
 $ oc logs ostoy-frontend-679cb85695-5cn7x
@@ -505,11 +505,11 @@ Run the following command to create the HPA. This will create an HPA that mainta
 
 In the OSToy app in the left menu, click on "Autoscaling" to access this portion of the workshop.  
 
-![HPA Menu](../media/managedlab/32-hpa-menu.png)
+![HPA Menu](../media/managedlab/lab1-task8-2.png)
 
 As was in the networking section you will see the total number of pods available for the microservice by counting the number of colored boxes.  In this case we have only one.  This can be verified through the web console or from the CLI.
 
-![HPA Main](../media/managedlab/33-hpa-mainpage.png)
+![HPA Menu](../media/managedlab/lab1-task8-3.png)
 
 You can use the following command to see the running microservice pods only:
 
