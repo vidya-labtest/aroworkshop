@@ -56,8 +56,8 @@ OSToy is a simple Node.js application that we will deploy to Azure Red Hat OpenS
 4. **Config Maps:**  Shows the contents of configmaps available to the application and the key:value pairs.
 5. **Secrets:** Shows the contents of secrets available to the application and the key:value pairs.
 6. **ENV Variables:** Shows the environment variables available to the application.
-7. **Pod Auto Scaling:** Explore the Horizontal Pod Autoscaler to see how increased loads are handled.
-8. **Networking:** Tools to illustrate networking within the application.
+7. **Networking:** Tools to illustrate networking within the application.
+8. **Pod Auto Scaling:** Explore the Horizontal Pod Autoscaler to see how increased loads are handled.
 9. **About:** Shows some more information about the application.
 
 ![Home Page](../media/managedlab/lab1-task8-4.png)
