@@ -1021,12 +1021,9 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
    - Storage account name: **ostoystorage<inject key="Deployment ID" enableCopy="false"/>**
    - Region: **<inject key="Region" enableCopy="false"/>**
    - Primary service: **Azure Blob Storage or Azure Data Lake Storage Gen 2**
-   - Primary workload: **Other**
    - Performance: **Standard**
    - Redundancy: **Locally-redundant storage (LRS)**
   
-   ![](../media/managedlab/create-strg.png)
-
 1. On the **Advanced** tab, enable the **Allow enabling anonymous access on individual containers** and click **Review + create** and then **Create**.
 
    ![](../media/managedlab/create-review-strg.png)
@@ -1098,6 +1095,8 @@ In this part we will create a Key Vault location to store the connection string 
 1. On the **Review + create** tab, review the access policy settings and click **Create**.
 
    ![](../media/managedlab/access-policy-create.png)
+
+1. Back on Create a key vault page, click on **Review + create** > **Create**.
 
 1. Now that the access policies are set up, create the key vault. Once the key vault deployment succeeds, click **Go to resource**.
 
