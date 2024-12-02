@@ -73,6 +73,10 @@ az aro list -o table
 
 The cluster web console's URL will be listed. Open that link in new browser tab and login with the `kubeadmin` user and password retrieved earlier.
 
+![](../media/Redhat-image4.png)
+
+![](../media/Redhat-image5.png)
+
 After logging in, you should be able to see the Azure Red Hat OpenShift Web Console.
 
 ![Azure Red Hat OpenShift Web Console](../media/openshift-webconsole.png)
@@ -92,7 +96,7 @@ On the following page click on **Display Token** and copy the ```oc login``` lin
 
 Open the [Azure Cloud Shell](https://shell.azure.com) and paste the login command. You should be able to connect to the cluster.
 
-![Login through the cloud shell](../media/oc-login-cloudshell.png)
+![](../media/Redhat-image7.png)
 
 ### Create a project
 
@@ -133,7 +137,7 @@ Now head back to the web console and switch to **Developer** settings from the t
 
 Switch to the **workshop** project, you should see a new deployment for mongoDB.
 
-![MongoDB deployment](../media/mongodb-overview.png)
+![](../media/Redhat-image8.png)
 
 
 ### Verify if the mongoDB pod was created successfully
