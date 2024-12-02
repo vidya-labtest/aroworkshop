@@ -527,7 +527,7 @@ Now that you have the application working, it is time to apply some security har
 Switch to the Administrator console.
 ![Switch to the Administrator console](../media/switch-to-admin-console.png)
 
-Make sure you're in the **workshop** project, expand **Networking** and click **Create Network Policy**.
+Make sure you're in the **workshop** project, expand **Networking**, select **NetwokPolicies** and click **Create Network Policy**.
 ![Cluster console page](../media/cluster-console.png)
 
 ### Create network policy
