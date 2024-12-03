@@ -122,7 +122,7 @@ Head over to <https://shell.azure.com> and sign in with your Azure Subscription 
 
 1. Select **Mount storage account**, your default **Subscription** and click **Apply**.
 
-   ![](../media/cloudshell/mount-strg.png)
+   ![](../media/Redhat-image1.png)
 
 1. Select **I want to create a storage account** and click **Next**.
 
@@ -136,11 +136,11 @@ Head over to <https://shell.azure.com> and sign in with your Azure Subscription 
    - Storage account name: **strg<inject key="Deployment ID" enableCopy="false"/>**
    - File share: **none**
 
-   ![](../media/cloudshell/create-strg.png)
+   ![](../media/Redhat-image2.png)
 
 1. You should now have access to the Azure Cloud Shell.
 
-   ![Set the storage account and fileshare names](../media/cloudshell/3-cloudshell.png)
+   ![](../media/Redhat-image3.png)
 
 <validation step="e4da372d-001a-4680-ba58-23f917916623" />
 

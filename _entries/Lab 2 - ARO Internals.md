@@ -272,11 +272,11 @@ In the OSToy app click on *Persistent Storage* in the left menu.  In the "Filena
 
 Underneath that, in the "File contents" box, enter text to be stored in the file. (e.g., "Azure Red Hat OpenShift is the greatest thing since sliced bread!"). Then click "Create file".
 
-![Create File](../media/managedlab/17-ostoy-createfile.png)
+![](../media/Redhat-image16.png)
 
 You will then see the file you created appear above under "Existing files".  Click on the file and you will see the filename and the contents you entered.
 
-![View File](../media/managedlab/18-ostoy-viewfile.png)
+![](../media/Redhat-image17.png)
 
 We now want to kill the pod and ensure that the new pod that spins up will be able to see the file we created. Exactly like we did in the previous section. Click on *Home* in the left menu.
 
@@ -1021,12 +1021,9 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
    - Storage account name: **ostoystorage<inject key="Deployment ID" enableCopy="false"/>**
    - Region: **<inject key="Region" enableCopy="false"/>**
    - Primary service: **Azure Blob Storage or Azure Data Lake Storage Gen 2**
-   - Primary workload: **Other**
    - Performance: **Standard**
    - Redundancy: **Locally-redundant storage (LRS)**
   
-   ![](../media/managedlab/create-strg.png)
-
 1. On the **Advanced** tab, enable the **Allow enabling anonymous access on individual containers** and click **Review + create** and then **Create**.
 
    ![](../media/managedlab/create-review-strg.png)
@@ -1098,6 +1095,8 @@ In this part we will create a Key Vault location to store the connection string 
 1. On the **Review + create** tab, review the access policy settings and click **Create**.
 
    ![](../media/managedlab/access-policy-create.png)
+
+1. Back on Create a key vault page, click on **Review + create** > **Create**.
 
 1. Now that the access policies are set up, create the key vault. Once the key vault deployment succeeds, click **Go to resource**.
 
