@@ -135,9 +135,6 @@ Now head back to the web console and switch to **Developer** settings from the t
 
 >**Note:** If you see Welcome to the Developer Perspective!. You can choose **Skip tour**
 
-Switch to the **workshop** project, you should see a new deployment for mongoDB.
-
-![](../media/Redhat-image8.png)
 
 
 ### Verify if the mongoDB pod was created successfully
